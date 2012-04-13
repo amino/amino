@@ -12,12 +12,9 @@ describe('Service', function() {
     it('should show the alphabet letter that we published', function(done) {
       daemon.subscribe('alphabet', function(letter) {
         assert(letter === 'A', 'received letter is "A"');
+        done();
       });
-    });
-    /*
-    it('should publish a letter without throwing', function() {
       client.publish('alphabet', 'A');
     });
-    */
   });
 });
