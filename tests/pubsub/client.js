@@ -1,10 +1,7 @@
-var Channel = require('../..').Channel;
-var context = require('rabbit.js').createContext();
+var Service = require('../..').Service;
+var client = new Service();
 
 // Receive messages from server.js and relay to STDOUT.
-context.on('ready', function() {
-  var c = new Channel(context, 'SUB', 'event::alphabet');
-  c.read(function(message) {
-    console.dir(message.data);
-  });
+client.subscribe('alphabet', function(data) {
+  console.log(data);
 });
