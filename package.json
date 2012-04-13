@@ -9,7 +9,7 @@
   },
   "main": "lib/core.js",
   "dependencies": {
-    "rabbit.js": ">=0.2.0"
+    "rabbit.js": "0.2.0"
   },
   "devDependencies": {},
   "optionalDependencies": {},
