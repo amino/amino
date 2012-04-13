@@ -1,12 +1,16 @@
-// Request IDs from clients.
-var context = require('rabbit.js').createContext();
-context.on('ready', function() {
-  var req = context.socket('REQ');
-  req.pipe(process.stdout);
-  req.connect('square', function() {
-    setInterval(function() {
-      var message = JSON.stringify({input: Math.round(100 * Math.random())});
-      req.write(message + "\n", 'utf8');
-    }, 1000);
+var Service = require('../..').Service;
+var server = new Service();
+
+// Farm out square root calculations to math daemon.
+setInterval(function() {
+  var url = '//math.edu/square?input=' + Math.round(100 * Math.random());
+  console.log('GET ' + url);
+  server.request(url, function(err, res) {
+    if (err) {
+      console.error('error: ' + err);
+    }
+    else {
+      console.log(res);
+    }
   });
-});
+}, 1000);

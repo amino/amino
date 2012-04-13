@@ -1,14 +1,20 @@
-// Field requests for square roots, and sign them with a client ID.
 var context = require('rabbit.js').createContext();
-context.on('ready', function() {
-  var rep = context.socket('REP');
-  rep.setEncoding('utf8');
-  rep.connect('square', function() {
-    rep.on('data', function(message) {
-      message = JSON.parse(message);
-      message.pid = process.pid;
-      message.output = Math.pow(message.input, 2);
-      rep.write(JSON.stringify(message) + "\n", 'utf8');
-    });
-  });
+var Service = require('../..').Service;
+var client = new Service();
+
+// Create the math daemon.
+client.reply('math.edu', function(req, done) {
+  console.log(req);
+  var parsed = require('url').parse(req.path, true);
+  // Field requests for square roots.
+  if (parsed.pathname == '/square') {
+    var data = {};
+    data.pid = process.pid;
+    data.input = parsed.query.input;
+    data.output = Math.pow(parsed.query.input, 2);
+    done(null, {code: 200, data: data});
+  }
+  else {
+    done('Page not found', {code: 404});
+  }
 });
