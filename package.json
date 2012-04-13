@@ -11,9 +11,14 @@
   "dependencies": {
     "rabbit.js": "0.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "*"
+  },
   "optionalDependencies": {},
   "engines": {
-    "node": "*"
+    "node": ">= 0.6.0"
+  },
+  "scripts": {
+    "test": "make test"
   }
 }
