@@ -1,7 +1,8 @@
-// Pull messages from the queue and relay to STDOUT.
 var context = require('rabbit.js').createContext();
-context.on('ready', function() {
-  var sub = context.socket('PULL');
-  sub.pipe(process.stdout);
-  sub.connect('alphabet');
+var Service = require('../..').Service;
+var client = new Service();
+
+// Pull messages from the queue and relay to STDOUT.
+client.pull('alphabet', function(data) {
+  console.log(data);
 });
