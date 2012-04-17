@@ -32,11 +32,14 @@ describe('Service', function() {
           assert.fail(letter, letters, 'Letter not in list', 'in');
         }
       });
-      client.publish('nonsense', 'aefae');
-      client.publish('alphabet', 'A');
-      client.publish('nonsense', '23523');
-      client.publish('nonsense', 'awfad');
-      client.publish('alphabet', 'B');
+      // Give time for the subscribe to take effect.
+      setTimeout(function() {
+        client.publish('nonsense', 'aefae');
+        client.publish('alphabet', 'A');
+        client.publish('nonsense', '23523');
+        client.publish('nonsense', 'awfad');
+        client.publish('alphabet', 'B');
+      }, 50);
     });
   });
 
