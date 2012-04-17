@@ -64,4 +64,26 @@ describe('Service', function() {
       client.push('beatles', 'Paul');
     });
   });
+
+  describe('req/rep', function() {
+    it('should respond with the correct answer', function(done) {
+      var input = Math.round(100 * Math.random());
+      var url = '//math.edu/square?input=' + input;
+      client.reply('math.edu', function(req, done) {
+        var parsed = require('url').parse(req.path, true);
+        // Field requests for square roots.
+        if (parsed.pathname == '/square') {
+          done(null, {code: 200, data: Math.pow(parsed.query.input, 2)});
+        }
+        else {
+          done('Page not found', {code: 404});
+        }
+      });
+
+      client.request(url, function(err, res) {
+        assert(res.data === input * input, 'Square correctly returned');
+        done(err);
+      });
+    });
+  });
 });
