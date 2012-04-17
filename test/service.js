@@ -73,12 +73,17 @@ describe('Service', function() {
       before(function() {
         client.reply('math.edu', function(req, done) {
           var parsed = require('url').parse(req.path, true);
-          // Field requests for square roots.
-          if (parsed.pathname == '/square') {
-            done({code: 200, data: Math.pow(parsed.query.input, 2)});
-          }
-          else {
-            done({code: 404, data: 'Page not found'});
+          // Field requests.
+          var input = new Number(parsed.query.input);
+          switch (parsed.pathname) {
+            case '/square':
+              done({code: 200, data: Math.pow(input, 2)});
+              break;
+            case '/meaning-of-life':
+              done({code: 500, data: "Can't calculate!"});
+              break;
+            default:
+              done({code: 404, data: "Page not found"});
           }
         });
       });
@@ -102,6 +107,17 @@ describe('Service', function() {
           assert(res.data === 'Page not found', 'res.data is error message');
           assert(res.code === 404, 'res.code is 404');
           assert(err === null, 'err is null');
+          done();
+        });
+      });
+
+      it('returns 500', function(done) {
+        var url = '//math.edu/meaning-of-life';
+        client.request(url, function(err, res) {
+          assert(res.data === "Can't calculate!", 'res.data is error message');
+          assert(res.code === 500, 'res.code is 500');
+          assert(err.code === 500, 'err.code is 500');
+          assert(err.message === "Can't calculate!", 'err.message is error message');
           done();
         });
       });
