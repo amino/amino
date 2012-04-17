@@ -69,23 +69,41 @@ describe('Service', function() {
   });
 
   describe('req/rep', function() {
-    it('GET request returns correct answer', function(done) {
-      var input = Math.round(100 * Math.random());
-      var url = '//math.edu/square?input=' + input;
-      client.reply('math.edu', function(req, done) {
-        var parsed = require('url').parse(req.path, true);
-        // Field requests for square roots.
-        if (parsed.pathname == '/square') {
-          done(null, {code: 200, data: Math.pow(parsed.query.input, 2)});
-        }
-        else {
-          done('Page not found', {code: 404});
-        }
+    describe('GET', function() {
+      before(function() {
+        client.reply('math.edu', function(req, done) {
+          var parsed = require('url').parse(req.path, true);
+          // Field requests for square roots.
+          if (parsed.pathname == '/square') {
+            done({code: 200, data: Math.pow(parsed.query.input, 2)});
+          }
+          else {
+            done({code: 404, data: 'Page not found'});
+          }
+        });
+      });
+      it('returns correct answer', function(done) {
+        var input = Math.round(100 * Math.random());
+        var url = '//math.edu/square?input=' + input;
+
+        client.request(url, function(err, res) {
+          assert(res.data === input * input, 'Square correctly returned');
+          assert(JSON.stringify(res.data) === res.body, 'res.body is JSON of data');
+          assert(res.headers['Content-Type'] === 'application/json', 'res content-type is JSON');
+          assert(res.code === 200, 'response code is 200');
+          done(err);
+        });
       });
 
-      client.request(url, function(err, res) {
-        assert(res.data === input * input, 'Square correctly returned');
-        done(err);
+      it('returns 404', function(done) {
+        var input = 100 * Math.random();
+        var url = '//math.edu/round?input=' + input;
+        client.request(url, function(err, res) {
+          assert(res.data === 'Page not found', 'res.data is error message');
+          assert(res.code === 404, 'res.code is 404');
+          assert(err === null, 'err is null');
+          done();
+        });
       });
     });
   });
