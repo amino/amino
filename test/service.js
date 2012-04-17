@@ -75,16 +75,18 @@ describe('Service', function() {
           var parsed = require('url').parse(req.path, true);
           // Field requests.
           var input = new Number(parsed.query.input);
+          var res;
           switch (parsed.pathname) {
             case '/square':
-              done({code: 200, data: Math.pow(input, 2)});
+              res = {code: 200, data: Math.pow(input, 2)};
               break;
             case '/meaning-of-life':
-              done({code: 500, data: "Can't calculate!"});
+              res = {code: 500, data: "Can't calculate!"};
               break;
             default:
-              done({code: 404, data: "Page not found"});
+              res = {code: 404, data: "Page not found"};
           }
+          done(new cantina.Response(res));
         });
       });
       it('returns correct answer', function(done) {
