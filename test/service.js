@@ -66,7 +66,7 @@ describe('Service', function() {
   });
 
   describe('req/rep', function() {
-    it('should respond with the correct answer', function(done) {
+    it('GET request returns correct answer', function(done) {
       var input = Math.round(100 * Math.random());
       var url = '//math.edu/square?input=' + input;
       client.reply('math.edu', function(req, done) {
