@@ -71,7 +71,7 @@ describe('Service', function() {
   describe('req/rep', function() {
     describe('GET', function() {
       before(function() {
-        client.reply('math.edu', function(req, done) {
+        daemon.reply('math.edu', function(req, done) {
           var parsed = require('url').parse(req.path, true);
           // Field requests.
           var input = new Number(parsed.query.input);
