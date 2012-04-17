@@ -9,7 +9,7 @@
   },
   "main": "lib/core.js",
   "dependencies": {
-    "rabbit.js": "0.2.0"
+    "rabbit.js": "git+https://github.com/cantina/rabbit.js.git#685ce84033a"
   },
   "devDependencies": {
     "mocha": "*"
