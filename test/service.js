@@ -72,19 +72,19 @@ describe('Service', function() {
     describe('GET', function() {
       before(function() {
         daemon.reply('math.edu', function(req, done) {
-          var parsed = require('url').parse(req.path, true);
-          // Field requests.
-          var input = new Number(parsed.query.input);
-          var res;
-          switch (parsed.pathname) {
+          var res = {};
+          switch (req.pathname) {
             case '/square':
-              res = {code: 200, data: Math.pow(input, 2)};
+              res.code = 200;
+              res.data = Math.pow(req.query.input, 2);
               break;
             case '/meaning-of-life':
-              res = {code: 500, data: "Can't calculate!"};
+              res.code = 500;
+              res.data = "Can't calculate!";
               break;
             default:
-              res = {code: 404, data: "Page not found"};
+              res.code = 404;
+              res.data = "Page not found";
           }
           done(new cantina.Response(res));
         });
