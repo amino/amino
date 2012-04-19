@@ -1,11 +1,11 @@
 {
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
-  "name": "cantina-core",
-  "description": "Cantina core, a social networking platform.",
+  "name": "cantina-service",
+  "description": "Base class for Cantina services",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cantina/cantina-core.git"
+    "url": "git://github.com/cantina/cantina-service.git"
   },
   "main": "lib/core.js",
   "dependencies": {
