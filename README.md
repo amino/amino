@@ -43,7 +43,7 @@ agent.start();
 queue/process
 -------------
 
-**request-sprocket.js**
+**order-sprocket.js**
 
 ```javascript
 // Add sprocket request to a queue. These things take time.
@@ -76,7 +76,7 @@ agent.start();
 ```
 
 request/serve
----------------
+-------------
 
 **get-sprocket.js**
 
