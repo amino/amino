@@ -75,8 +75,8 @@ agent.on('ready', function() {
 agent.start();
 ```
 
-request/serve
--------------
+request/respond
+---------------
 
 **get-sprocket.js**
 
