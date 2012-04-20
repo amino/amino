@@ -1,25 +1,119 @@
-Base class for Cantina services. Gives access to the methods:
+agent
+=====
 
-- **publish**('event-name', data)
-  
-  Publish an event.
+Clustered application creation toolkit
 
-- **subscribe**('event-name', function(data) {})
+**agent** provides a simple API for communicating between nodes in a cluster:
 
-  Subscribe to an event.
+- **publish/subcribe** - aka "events"
+- **queue/process** - aka "job queue"
+- **request/respond** - aka "REST"
 
-- **push**('queue-name', data)
+Mix and match these patterns to create your own distributed application!
 
-  Push some data onto a queue (FIFO).
+pub/sub
+-------
 
-- **pull**('queue-name', function(data) {})
+**publisher.js**
 
-  Pull some data off a queue (FIFO).
+```javascript
+// Tell other nodes my name when I start.
+var agent = require('agent').init();
+    
+agent.on('ready', function() {
+  agent.publish('myname', 'agent99');
+});
+agent.start();
+```
 
-- **request**('svc://service-name/some/path?query=blah', function(err, res) {})
+**subscriber.js**
 
-  Issue a request to a service, and handle the response.
+```javascript
+// Greet other nodes as they come up.
+var agent = require('agent').init();
 
-- **reply**('service-name', ['/some/path'], function(req, res) {})
+agent.on('ready', function() {
+  agent.subscribe('myname', function(name) {
+    console.log('hello, ' + name + '!');
+  });
+});
+agent.start();
+```
 
-  Handle a service request.
+defer/process
+-------------
+
+**request-sprocket.js**
+
+```javascript
+// Add sprocket request to a queue. These things take time.
+var agent = require('agent').init();
+
+agent.on('ready', function() {
+  var sprocket_request = {
+    type: 'sprocket-b',
+    spokes: 5
+  };
+  agent.queue('sprocket-request', sprocket_request);
+  console.log('Your sprocket is processing!');
+});
+agent.start();
+```
+
+**make-sprockets.js**
+
+```javascript
+// Fulfill sprocket requests.
+var agent = require('agent').init();
+
+agent.on('ready', function() {
+  agent.process('sprocket-request', function(sprocket_request) {
+    var sprocket = new Sprocket(sprocket_request);
+    console.log('Created sprocket with id ' + sprocket.id);
+  });
+});
+agent.start();
+```
+
+request/serve
+---------------
+
+**get-sprocket.js**
+
+```javascript
+// Request a sprocket from the sprocket service.
+var agent = require('agent').init();
+
+agent.on('ready', function() {
+  agent.request('agent://sprockets/af920c', function (error, response, body) {
+    var sprocket = response.data;
+    console.log(sprocket);
+  });
+  agent.request('http://icanhazip.com/', function (error, response, body) {
+    console.log('my ip is: ' + body);
+  });
+});
+agent.start();
+```
+
+**serve-sprocket.js**
+
+```javascript
+// Help serve sprockets.
+var agent = require('agent').init();
+
+agent.on('ready', function() {
+  agent.respond('sprockets', function(router) {
+    // router is a director router.
+    // @see https://github.com/flatiron/director
+    router.on('/:sprocketId', function(sprocketId) {
+      var res = this.res;
+      db.sprockets.find({id: sprocketId}, function(err, sprocket) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(sprocket));
+      });
+    });
+  });
+});
+agent.start();
+```
