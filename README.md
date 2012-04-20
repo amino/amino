@@ -11,8 +11,8 @@ Clustered application creation toolkit
 
 Mix and match these patterns to create your own distributed application!
 
-pub/sub
--------
+publish/subscribe
+-----------------
 
 **publisher.js**
 
