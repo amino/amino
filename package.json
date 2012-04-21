@@ -1,20 +1,20 @@
 {
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
-  "name": "cantina-service",
-  "description": "Base class for Cantina services",
+  "name": "agent",
+  "description": "Clustered application creation toolkit",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cantina/cantina-service.git"
+    "url": "git://github.com/cantina/agent.git"
   },
-  "main": "lib/core.js",
+  "main": "lib/agent.js",
   "dependencies": {
-    "rabbit.js": "git+https://github.com/cantina/rabbit.js.git#685ce84033a"
+    "request": "~2.9.202",
+    "director": "~1.0.9-1"
   },
   "devDependencies": {
     "mocha": "*"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": ">= 0.6.0"
   },
