@@ -10,7 +10,8 @@
   "main": "lib/agent.js",
   "dependencies": {
     "request": "~2.9.202",
-    "director": "~1.0.9-1"
+    "director": "~1.0.9-1",
+    "async": "~0.1.18"
   },
   "devDependencies": {
     "mocha": "*"

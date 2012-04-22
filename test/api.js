@@ -12,7 +12,7 @@ function inArray(val, arr) {
 
 describe('agent', function() {
   var agent = require('../').init();
-  afterAll(function() {
+  afterEach(function() {
     if (agent) {
       agent.reset();
     }
@@ -22,26 +22,23 @@ describe('agent', function() {
     it('should only receive from the subscribed event', function(done) {
       var left = 2;
       var letters = ['A', 'B'];
-      agent.on('ready', function() {
-        agent.on('subscribe', function(channel, count) {
-          agent.publish('nonsense', 'aefae');
-          agent.publish('alphabet', 'A');
-          agent.publish('nonsense', '23523');
-          agent.publish('nonsense', 'awfad');
-          agent.publish('alphabet', 'B');
-        });
-        agent.subscribe('alphabet', function(letter) {
-          if (inArray(letter, letters)) {
-            if (!--left) {
-              done();
-            }
-          }
-          else {
-            assert.fail(letter, letters, 'Letter not in list', 'in');
-          }
-        });
+      agent.on('subscribe', function(channel, count) {
+        agent.publish('nonsense', 'aefae');
+        agent.publish('alphabet', 'A');
+        agent.publish('nonsense', '23523');
+        agent.publish('nonsense', 'awfad');
+        agent.publish('alphabet', 'B');
       });
-      agent.start();
+      agent.subscribe('alphabet', function(letter) {
+        if (inArray(letter, letters)) {
+          if (!--left) {
+            done();
+          }
+        }
+        else {
+          assert.fail(letter, letters, 'Letter not in list', 'in');
+        }
+      });
     });
   });
 
@@ -70,7 +67,6 @@ describe('agent', function() {
           }
         });
       });
-      agent.start();
     });
   });
 
@@ -109,7 +105,6 @@ describe('agent', function() {
             done(err);
           });
         });
-        agent.start();
       });
 
       it('returns 404', function(done) {
@@ -124,7 +119,6 @@ describe('agent', function() {
             done();
           });
         });
-        agent.start();
       });
 
       it('returns 500', function(done) {
@@ -137,7 +131,6 @@ describe('agent', function() {
             done();
           });
         });
-        agent.start();
       });
     });
   });
