@@ -46,27 +46,27 @@ describe('agent', function() {
     it('should only receive from the subscribed queue', function(done) {
       var left = 4;
       var beatles = ['Ringo', 'John', 'Paul', 'George'];
-      agent.on('ready', function() {
-        agent.queue('u2', 'Bono');
-        agent.queue('beatles', 'Ringo');
-        agent.queue('jimi', 'Hendrix');
-        agent.queue('mamas', 'Cass');
-        agent.queue('beatles', 'John');
-        agent.queue('beatles', 'George');
-        agent.queue('cream', 'Eric');
-        agent.queue('beatles', 'Paul');
+      agent.queue('u2', 'Bono');
+      agent.queue('jimi', 'Hendrix');
+      agent.queue('mamas', 'Cass');
+      agent.queue('beatles', 'John');
+      agent.queue('beatles', 'George');
+      agent.queue('cream', 'Eric');
+      agent.queue('beatles', 'Paul');
 
-        agent.process('beatles', function(name) {
-          if (inArray(name, beatles)) {
-            if (!--left) {
-              done();
-            }
+      agent.process('beatles', function(data, next) {
+        if (inArray(data, beatles)) {
+          if (!--left) {
+            done();
           }
-          else {
-            assert.fail(name, beatles, 'Name not in list', 'in');
-          }
-        });
+        }
+        else {
+          assert.fail(data, beatles, 'Name not in list', 'in');
+        }
+        next();
       });
+
+      agent.queue('beatles', 'Ringo');
     });
   });
 
