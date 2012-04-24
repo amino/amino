@@ -112,5 +112,7 @@ agent.respond('sprockets', function(router) {
       res.end(sprocket);
     });
   });
+}, function() {
+  // Now we are listening for requests.
 });
 ```
