@@ -87,7 +87,6 @@ describe('agent', function() {
       before(function(done) {
         agent.respond('math.edu', function(router) {
           router.get('/square/:input', function(input) {
-            var query = require('url').parse(this.req.url, true).query || {};
             var data = Math.pow(input, 2);
             this.res.writeHead(200, {'Content-Type': 'application/json'});
             this.res.end(JSON.stringify(data));
