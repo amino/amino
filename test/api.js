@@ -68,6 +68,15 @@ describe('agent', function() {
 
       agent.queue('beatles', 'Ringo');
     });
+
+    it('should be able to handle objects', function(done) {
+      agent.queue('jazz', {name: 'Bill Evans'});
+
+      agent.process('jazz', function(data, next) {
+        assert(data.name === 'Bill Evans', 'Object property can be accessed');
+        done();
+      });
+    });
   });
 
   describe('request/respond', function() {
