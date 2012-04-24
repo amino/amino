@@ -12,6 +12,9 @@ function inArray(val, arr) {
 
 describe('agent', function() {
   var agent = require('../').init();
+  agent.on('error', function(err) {
+    throw err;
+  });
   afterEach(function() {
     if (agent) {
       agent.reset();
@@ -81,38 +84,30 @@ describe('agent', function() {
 
   describe('request/respond', function() {
     describe('GET', function() {
-      before(function() {
+      before(function(done) {
         agent.respond('math.edu', function(router) {
-          router.on('/square', function() {
+          router.get('/square', function() {
             var query = require('url').parse(this.req.url, true).query || {};
             var data = Math.pow(query.input, 2);
             this.res.writeHead(200, {'Content-Type': 'application/json'});
             this.res.end(JSON.stringify(data));
           });
 
-          router.on('/meaning-of-life', function() {
+          router.get('/meaning-of-life', function() {
             var data = "Can't calculate!";
-            this.res.writeHead(200, {'Content-Type': 'application/json'});
+            this.res.writeHead(500, {'Content-Type': 'application/json'});
             this.res.end(JSON.stringify(data));
           });
-
-          // Catch-all
-          router.on(/.*/, function() {
-            var data = "Page not found";
-            this.res.writeHead(404, {'Content-Type': 'application/json'});
-            this.res.end(JSON.stringify(data));
-          });
+          done();
         });
       });
       it('returns correct answer', function(done) {
         var input = Math.round(100 * Math.random());
         var url = 'agent://math.edu/square?input=' + input;
 
-        agent.on('ready', function() {
-          agent.request(url, function(err, res, data) {
-            assert(data === input * input, 'Square correctly returned');
-            done(err);
-          });
+        agent.request(url, function(err, res, data) {
+          assert(data === input * input, 'Square correctly returned');
+          done(err);
         });
       });
 
@@ -120,25 +115,21 @@ describe('agent', function() {
         var input = 100 * Math.random();
         var url = 'agent://math.edu/round?input=' + input;
 
-        agent.on('ready', function() {
-          agent.request(url, function(err, res, data) {
-            assert(data === 'Page not found', 'res.data is error message');
-            assert(res.statusCode === 404, 'res.code is 404');
-            assert(err === null, 'err is null');
-            done();
-          });
+        agent.request(url, function(err, res, data) {
+          assert(data === 'Page not found', 'res.data is error message');
+          assert(res.statusCode === 404, 'res.code is 404');
+          assert(err === null, 'err is null');
+          done();
         });
       });
 
       it('returns 500', function(done) {
         var url = 'agent://math.edu/meaning-of-life';
 
-        agent.on('ready', function() {
-          agent.request(url, function(err, res, data) {
-            assert(data === "Can't calculate!", 'res.data is error message');
-            assert(res.statusCode === 500, 'res.code is 500');
-            done();
-          });
+        agent.request(url, function(err, res, data) {
+          assert(data === "Can't calculate!", 'res.data is error message');
+          assert(res.statusCode === 500, 'res.code is 500');
+          done();
         });
       });
     });
