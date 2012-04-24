@@ -35,6 +35,11 @@ describe('request', function() {
         this.res.writeHead(500, {'Content-Type': 'application/json'});
         this.res.end(JSON.stringify(data));
       });
+
+      router.post('/echo', function() {
+        this.res.writeHead(200, {'Content-Type': 'application/json'});
+        this.res.end(JSON.stringify(this.req.body));
+      });
     }, function() {
       done();
     });
@@ -76,6 +81,7 @@ describe('request', function() {
 
     agent.request('agent://math.edu/square/' + input, function(err, res, data) {
       assert.strictEqual(data, input * input, 'Square correctly returned');
+      assert.ifError(err);
       done(err);
     });
   });
@@ -100,5 +106,16 @@ describe('request', function() {
     });
   });
 
-  it('can transparently serialize/unserialize JSON');
+  it('can transparently serialize/unserialize JSON', function(done) {
+    var options = {
+      method: 'POST',
+      url: 'agent://math.edu/echo',
+      body: {some: 'pig'}
+    };
+    agent.request(options, function(err, res, data) {
+      assert.strictEqual(data, options, 'data returned is identical to what was sent');
+      assert.ifError(err);
+      done();
+    });
+  });
 });
