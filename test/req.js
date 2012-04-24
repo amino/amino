@@ -43,17 +43,17 @@ describe('request', function() {
   
   var posts = [];
   var currentId = 1;
-  function getPost(id) {
-    id = parseInt(id);
-    for (var i in posts) {
-      if (posts[i].id === id) {
-        return posts[i];
-      }
-    }
-    return null;
-  }
   before(function(done) {
     agent.respond('cloudpost', function(router) {
+      function getPost(id) {
+        id = parseInt(id);
+        for (var i in posts) {
+          if (posts[i].id === id) {
+            return posts[i];
+          }
+        }
+        return null;
+      }
       router.get('/posts', function() {
         var data = posts;
         this.res.json(data);
