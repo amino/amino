@@ -86,9 +86,9 @@ describe('agent', function() {
     describe('GET', function() {
       before(function(done) {
         agent.respond('math.edu', function(router) {
-          router.get('/square', function() {
+          router.get('/square/:input', function(input) {
             var query = require('url').parse(this.req.url, true).query || {};
-            var data = Math.pow(query.input, 2);
+            var data = Math.pow(input, 2);
             this.res.writeHead(200, {'Content-Type': 'application/json'});
             this.res.end(JSON.stringify(data));
           });
@@ -103,7 +103,7 @@ describe('agent', function() {
       });
       it('returns correct answer', function(done) {
         var input = Math.round(100 * Math.random());
-        var url = 'agent://math.edu/square?input=' + input;
+        var url = 'agent://math.edu/square/' + input;
 
         agent.request(url, function(err, res, data) {
           assert(data === input * input, 'Square correctly returned');
