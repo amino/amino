@@ -110,10 +110,10 @@ describe('request', function() {
     var options = {
       method: 'POST',
       url: 'agent://math.edu/echo',
-      body: {some: 'pig'}
+      body: {some: 'pig', name: 'wilbur', age: 2, size: '20 lbs.', friends: ['charlotte', 'fern']}
     };
     agent.request(options, function(err, res, data) {
-      assert.strictEqual(data, options, 'data returned is identical to what was sent');
+      assert.deepEqual(data, options.body, 'data returned is identical to what was sent');
       assert.ifError(err);
       done();
     });
