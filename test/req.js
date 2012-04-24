@@ -35,14 +35,12 @@ describe('request', function() {
         this.res.writeHead(500, {'Content-Type': 'application/json'});
         this.res.end(JSON.stringify(data));
       });
-    }, function(host, port) {
+    }, function() {
       done();
     });
   });
-
   
   before(function(done) {
-    console.log('after');
     agent.respond('cloudpost', function(router) {
       router.get('/posts/:id', function(id) {
         console.log(this);
@@ -68,7 +66,7 @@ describe('request', function() {
         this.res.writeHead(500, {'Content-Type': 'application/json'});
         this.res.end(JSON.stringify(data));
       });
-    }, function(host, port) {
+    }, function() {
       done();
     });
   });
