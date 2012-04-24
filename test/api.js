@@ -26,11 +26,13 @@ describe('agent', function() {
       var left = 2;
       var letters = ['A', 'B'];
       agent.on('subscribe', function(channel, count) {
-        agent.publish('nonsense', 'aefae');
-        agent.publish('alphabet', 'A');
-        agent.publish('nonsense', '23523');
-        agent.publish('nonsense', 'awfad');
-        agent.publish('alphabet', 'B');
+        if (channel === 'alphabet') {
+          agent.publish('nonsense', 'aefae');
+          agent.publish('alphabet', 'A');
+          agent.publish('nonsense', '23523');
+          agent.publish('nonsense', 'awfad');
+          agent.publish('alphabet', 'B');
+        }
       });
       agent.subscribe('alphabet', function(letter) {
         if (inArray(letter, letters)) {
@@ -41,6 +43,18 @@ describe('agent', function() {
         else {
           assert.fail(letter, letters, 'Letter not in list', 'in');
         }
+      });
+    });
+
+    it('can handle objects', function(done) {
+      agent.on('subscribe', function(channel, count) {
+        if (channel === 'objects') {
+          agent.publish('objects', {jorge: 'Ben'});
+        }
+      });
+      agent.subscribe('objects', function(data) {
+        assert.strictEqual(data.jorge, 'Ben', 'object properties can be accessed on sub');
+        done();
       });
     });
   });
@@ -76,7 +90,7 @@ describe('agent', function() {
       agent.queue('jazz', {name: 'Bill Evans'});
 
       agent.process('jazz', function(data, next) {
-        assert(data.name === 'Bill Evans', 'Object property can be accessed');
+        assert.strictEqual(data.name, 'Bill Evans', 'Object property can be accessed');
         done();
       });
     });
@@ -106,7 +120,7 @@ describe('agent', function() {
         var url = 'agent://math.edu/square/' + input;
 
         agent.request(url, function(err, res, data) {
-          assert(data === input * input, 'Square correctly returned');
+          assert.strictEqual(data, input * input, 'Square correctly returned');
           done(err);
         });
       });
@@ -116,9 +130,9 @@ describe('agent', function() {
         var url = 'agent://math.edu/round?input=' + input;
 
         agent.request(url, function(err, res, data) {
-          assert(data === 'Page not found', 'res.data is error message');
-          assert(res.statusCode === 404, 'res.code is 404');
-          assert(err === null, 'err is null');
+          assert.strictEqual(data, 'Page not found', 'res.data is error message');
+          assert.strictEqual(res.statusCode, 404, 'res.code is 404');
+          assert.ifError(err);
           done();
         });
       });
@@ -127,11 +141,14 @@ describe('agent', function() {
         var url = 'agent://math.edu/meaning-of-life';
 
         agent.request(url, function(err, res, data) {
-          assert(data === "Can't calculate!", 'res.data is error message');
-          assert(res.statusCode === 500, 'res.code is 500');
+          assert.strictEqual(data, "Can't calculate!", 'res.data is error message');
+          assert.strictEqual(res.statusCode, 500, 'res.code is 500');
+          assert.ifError(err);
           done();
         });
       });
+
+      it('can transparently serialize/unserialize JSON');
     });
   });
 });
