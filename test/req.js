@@ -26,19 +26,16 @@ describe('request', function() {
     agent.respond('math.edu', function(router) {
       router.get('/square/:input', function(input) {
         var data = Math.pow(input, 2);
-        this.res.writeHead(200, {'Content-Type': 'application/json'});
-        this.res.end(JSON.stringify(data));
+        this.res.json(data);
       });
 
       router.get('/meaning-of-life', function() {
         var data = "Can't calculate!";
-        this.res.writeHead(500, {'Content-Type': 'application/json'});
-        this.res.end(JSON.stringify(data));
+        this.res.json(data, 500);
       });
 
       router.post('/echo', function() {
-        this.res.writeHead(200, {'Content-Type': 'application/json'});
-        this.res.end(JSON.stringify(this.req.body));
+        this.res.json(this.req.body);
       });
     }, function() {
       done();
