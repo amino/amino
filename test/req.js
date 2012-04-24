@@ -235,5 +235,12 @@ describe('request', function() {
         });
       });
     });
+
+    it('supports HTTP', function(done) {
+      agent.request('http://twitter.com/', function(err, response, body) {
+        assert.ok(body.match(/Twitter/), 'request to twitter made');
+        done();
+      });
+    });
   });
 });
