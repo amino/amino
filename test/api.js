@@ -97,7 +97,7 @@ describe('agent', function() {
             this.res.writeHead(500, {'Content-Type': 'application/json'});
             this.res.end(JSON.stringify(data));
           });
-        }, function() {
+        }, function(host, port) {
           done();
         });
       });
