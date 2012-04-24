@@ -42,9 +42,9 @@ describe('request', function() {
   });
   
   var posts = [];
-  var currentId = 1;
   before(function(done) {
     agent.respond('cloudpost', function(router) {
+      var currentId = 1;
       function getPost(id) {
         id = parseInt(id);
         for (var i in posts) {
