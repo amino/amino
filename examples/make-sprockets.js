@@ -1,12 +1,13 @@
 // Fulfill sprocket requests.
-var agent = require('..').init();
+var agent = require('..').init()
+  .use(require('agent-queue-amqp'));
 var id = 0;
 
 function makeSprocket(order, done) {
   setTimeout(function() {
     order.id = ++id;
     done(null, order);
-  }, Math.random() * 5000);
+  }, Math.random() * 1000);
 }
 
 agent.process('orders', function(order, next) {

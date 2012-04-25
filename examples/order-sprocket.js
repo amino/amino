@@ -1,5 +1,6 @@
 // Add sprocket request to a queue. These things take time.
-var agent = require('..').init();
+var agent = require('..').init()
+  .use(require('agent-queue-amqp'));
 
 var order = {
   type: 'sprocket-b',

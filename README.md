@@ -18,7 +18,8 @@ publish/subscribe
 
 ```javascript
 // Tell other nodes my name when I start.
-var agent = require('agent').init();
+var agent = require('agent').init()
+  .use(require('agent-pubsub-redis'));
 
 agent.publish('myname', 'agent99');
 ```
@@ -27,7 +28,8 @@ agent.publish('myname', 'agent99');
 
 ```javascript
 // Greet other nodes as they come up.
-var agent = require('agent').init();
+var agent = require('agent').init()
+  .use(require('agent-pubsub-redis'));
 
 agent.subscribe('myname', function(name) {
   console.log('hello, ' + name + '!');
@@ -41,7 +43,8 @@ queue/process
 
 ```javascript
 // Add sprocket request to a queue. These things take time.
-var agent = require('agent').init();
+var agent = require('agent').init()
+  .use(require('agent-queue-amqp'));
 
 var order = {
   type: 'sprocket-b',
@@ -55,7 +58,8 @@ console.log('Your order is processing!');
 
 ```javascript
 // Fulfill sprocket requests.
-var agent = require('agent').init();
+var agent = require('agent').init()
+  .use(require('agent-queue-amqp'));
 
 agent.process('orders', function(order, next) {
   makeSprocket(order, function(err, sprocket) {
@@ -77,7 +81,10 @@ request/respond
 
 ```javascript
 // Request a sprocket from the sprocket service.
-var agent = require('agent').init();
+// Note that req-http middleware requires pubsub.
+var agent = require('agent').init()
+  .use(require('agent-req-http'))
+  .use(require('agent-pubsub-redis'));
 
 // Agent.request() is the same as github.com/mikeal/request, except
 // it can handle the agent:// protocol, which uses virtual hostnames, defined
@@ -97,7 +104,9 @@ agent.request('http://icanhazip.com/', function (error, response, body) {
 
 ```javascript
 // Create a sprocket service.
-var agent = require('agent').init();
+var agent = require('agent').init()
+  .use(require('agent-req-http'))
+  .use(require('agent-pubsub-redis'));
 
 // "sprockets" will be our virtual hostname (for requests to agent://sprockets/...)
 agent.respond('sprockets', function(router) {
@@ -112,7 +121,8 @@ agent.respond('sprockets', function(router) {
       res.end(sprocket);
     });
   });
-}, function(host, port) {
+}, function(spec) {
   // Now we are listening for requests.
+  console.log("listening on " + spec.host + ':' + spec.port);
 });
 ```
