@@ -13,7 +13,7 @@ agent.respond('backend', function(router) {
       generator: mySpec,
       number: Math.random()
     };
-    log('responded with ' + data.number);
+    //log('responded with ' + data.number);
     this.res.json(data);
   });
 }, function(spec) {
