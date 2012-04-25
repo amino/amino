@@ -2,17 +2,17 @@ var agent = require('../../').init()
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
-var spec;
+var mySpec;
 agent.respond('backend', function(router) {
   router.get('/rand', function() {
     var data = {
-      generator: spec.id,
+      generator: mySpec,
       number: Math.random()
     };
     console.log('responded with ' + data.number);
     this.res.json(data);
   });
-}, function(agentSpec) {
-  spec = agentSpec;
-  console.log('Listening on ' + spec.host + ':' + spec.port);
+}, function(spec) {
+  mySpec = spec;
+  console.log('listening on ' + agent.formatSpec(spec));
 });

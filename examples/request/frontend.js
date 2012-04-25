@@ -14,8 +14,8 @@ server.on('request', function(req, res) {
       }
       else {
         res.writeHead(200, {'content-type': 'text/plain; charset=utf-8'});
-        console.log('response from ' + body.generator + ' in ' + Math.round(Date.now() - timeStart) + 'ms');
-        res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + body.generator);
+        console.log('response from ' + agent.formatSpec(body.generator) + ' in ' + Math.round(Date.now() - timeStart) + 'ms');
+        res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + agent.formatSpec(body.generator));
       }
     });
   }
