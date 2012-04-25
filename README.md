@@ -77,6 +77,47 @@ agent.process('orders', function(order, next) {
 request/respond
 ---------------
 
+**serve-sprocket.js**
+
+```javascript
+// Create a sprocket service.
+var agent = require('agent').init()
+  .use(require('agent-req-http'))
+  .use(require('agent-pubsub-redis'));
+
+// "sprockets" will be our virtual host (for requests to agent://sprockets/...)
+agent.respond('sprockets', function(router) {
+  // router is a director router.
+  // @see https://github.com/flatiron/director
+  router.on('/:sprocketId', function(sprocketId) {
+    // this.req and this.res are http.ServerRequest and http.serverResponse
+    // respectively.
+    // We also have convenience methods:
+    //   - this.res.json(obj, statusCode, leaveOpen = false)
+    //   - this.res.text(text, statusCode, leaveOpen = false)
+    //   - this.res.html(html)
+    // ...for setting the content-type and ending with that data.
+    var that = this;
+    db.sprockets.find({id: sprocketId}, function(err, sprocket) {
+      if (err) {
+        that.res.writeHead(500);
+        that.res.end();
+      }
+      else if (!sprocket) {
+        that.res.writeHead(404);
+        that.res.end();
+      }
+      else {
+        that.res.json(sprocket);
+      }
+    });
+  });
+}, function(spec) {
+  // Now we are listening for requests.
+  console.log("listening for " + spec.service + " requests on " + spec.host + ':' + spec.port);
+});
+```
+
 **get-sprocket.js**
 
 ```javascript
@@ -87,42 +128,15 @@ var agent = require('agent').init()
   .use(require('agent-pubsub-redis'));
 
 // Agent.request() is the same as github.com/mikeal/request, except
-// it can handle the agent:// protocol, which uses virtual hostnames, defined
-// with agent.respond().
+// it can handle the agent:// protocol, which uses virtual hosts defined
+// with agent.respond(). json option defaults to true.
 // @see https://github.com/mikeal/request
 agent.request('agent://sprockets/af920c', function (error, response, body) {
-  var sprocket = response.data;
+  var sprocket = body;
   console.log(sprocket);
 });
 // Also usable with vanilla HTTP.
 agent.request('http://icanhazip.com/', function (error, response, body) {
   console.log('my ip is: ' + body);
-});
-```
-
-**serve-sprocket.js**
-
-```javascript
-// Create a sprocket service.
-var agent = require('agent').init()
-  .use(require('agent-req-http'))
-  .use(require('agent-pubsub-redis'));
-
-// "sprockets" will be our virtual hostname (for requests to agent://sprockets/...)
-agent.respond('sprockets', function(router) {
-  // router is a director router.
-  // @see https://github.com/flatiron/director
-  router.on('/:sprocketId', function(sprocketId) {
-    // this.res is a http.ServerResponse object.
-    // Our res.end() can also take object and status arguments,
-    // which will auto-encode the JSON response for us.
-    var res = this.res;
-    db.sprockets.find({id: sprocketId}, function(err, sprocket) {
-      res.end(sprocket);
-    });
-  });
-}, function(spec) {
-  // Now we are listening for requests.
-  console.log("listening on " + spec.host + ':' + spec.port);
 });
 ```
