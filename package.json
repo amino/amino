@@ -1,6 +1,7 @@
 {
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "agent",
+  "private": true,
   "description": "Clustered application creation toolkit",
   "version": "0.0.0",
   "repository": {
