@@ -4,8 +4,12 @@ var agent = require('../../').init()
 var http = require('http')
   , server = http.createServer();
 
+var log = function() {
+  console.log.apply(this, arguments);
+};
+
 server.on('request', function(req, res) {
-  var timeStart = Date.now();
+  //var timeStart = Date.now();
   if (req.url === '/') {
     agent.request('agent://backend/rand', function(err, response, body) {
       if (err) {
@@ -14,7 +18,7 @@ server.on('request', function(req, res) {
       }
       else {
         res.writeHead(200, {'content-type': 'text/plain; charset=utf-8'});
-        console.log('response from ' + agent.formatSpec(body.generator) + ' in ' + Math.round(Date.now() - timeStart) + 'ms');
+        //log('response from ' + agent.formatSpec(body.generator) + ' in ' + Math.round(Date.now() - timeStart) + 'ms');
         res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + agent.formatSpec(body.generator));
       }
     });
