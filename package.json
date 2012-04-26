@@ -10,7 +10,6 @@
   },
   "main": "lib/agent.js",
   "dependencies": {
-    "director": "~1.0.9-1",
     "async": "~0.1.18"
   },
   "devDependencies": {
