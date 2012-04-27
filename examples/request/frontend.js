@@ -6,18 +6,8 @@ var http = require('http')
   , server = http.createServer();
 
 server.on('request', function(req, res) {
-  //var timeStart = Date.now();
   if (req.url === '/') {
-    agent.request('agent://backend/rand', function(err, response, body) {
-      if (err) {
-        res.writeHead(500, {'content-type': 'text/plain; charset=utf-8'});
-        res.end('Error! whoops....' + err);
-      }
-      else {
-        res.writeHead(200, {'content-type': 'text/plain; charset=utf-8'});
-        res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + body.generator);
-      }
-    });
+    agent.request('agent://backend/rand').pipe(res);
   }
   else {
     res.writeHead(404, {'content-type': 'text/plain; charset=utf-8'});

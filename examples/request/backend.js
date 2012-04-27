@@ -4,12 +4,7 @@ var agent = require('../../').init({debug: true})
 
 agent.respond('backend', function(router, spec) {
   router.get('/rand', function() {
-    var data = {
-      generator: spec.toString(),
-      number: Math.random()
-    };
-    //log('responded with ' + data.number);
-    this.res.json(data);
+    this.res.text("Your number is... \n\n" + Math.random() + "\n\nSincerely,\n" + spec.toString());
   });
   agent.log('listening on ' + spec.toString());
 });
