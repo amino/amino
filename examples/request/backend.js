@@ -1,22 +1,15 @@
-var agent = require('../../').init()
+var agent = require('../../').init({debug: true})
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
-var log = function() {
-  console.log.apply(this, arguments);
-};
-
-var mySpec;
-agent.respond('backend', function(router) {
+agent.respond('backend', function(router, spec) {
   router.get('/rand', function() {
     var data = {
-      generator: mySpec,
+      generator: spec.toString(),
       number: Math.random()
     };
     //log('responded with ' + data.number);
     this.res.json(data);
   });
-}, function(spec) {
-  mySpec = spec;
-  log('listening on ' + agent.formatSpec(spec));
+  agent.log('listening on ' + spec.toString());
 });

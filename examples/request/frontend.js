@@ -1,12 +1,9 @@
-var agent = require('../../').init()
+var agent = require('../../').init({debug: true})
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
+
 var http = require('http')
   , server = http.createServer();
-
-var log = function() {
-  console.log.apply(this, arguments);
-};
 
 server.on('request', function(req, res) {
   //var timeStart = Date.now();
@@ -18,8 +15,7 @@ server.on('request', function(req, res) {
       }
       else {
         res.writeHead(200, {'content-type': 'text/plain; charset=utf-8'});
-        //log('response from ' + agent.formatSpec(body.generator) + ' in ' + Math.round(Date.now() - timeStart) + 'ms');
-        res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + agent.formatSpec(body.generator));
+        res.end("Your number is... \n\n" + body.number + "\n\nSincerely,\n" + body.generator);
       }
     });
   }
@@ -31,5 +27,5 @@ server.on('request', function(req, res) {
 
 var port = Math.floor(Math.random() * (50000 - 30000)) + 30000;
 server.listen(port, function() {
-  console.log('Listening on http://localhost:' + port + '/');
+  agent.log('Listening on http://localhost:' + port + '/');
 });
