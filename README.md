@@ -97,24 +97,11 @@ agent.respond('sprockets', function(router) {
     //   - this.res.text(text, statusCode, leaveOpen = false)
     //   - this.res.html(html)
     // ...for setting the content-type and ending with that data.
-    var that = this;
+    var self = this;
     db.sprockets.find({id: sprocketId}, function(err, sprocket) {
-      if (err) {
-        that.res.writeHead(500);
-        that.res.end();
-      }
-      else if (!sprocket) {
-        that.res.writeHead(404);
-        that.res.end();
-      }
-      else {
-        that.res.json(sprocket);
-      }
+      self.res.json(sprocket);
     });
   });
-}, function(spec) {
-  // Now we are listening for requests.
-  console.log("listening for " + spec.service + " requests on " + spec.host + ':' + spec.port);
 });
 ```
 

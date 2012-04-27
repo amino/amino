@@ -39,7 +39,7 @@ describe('request', function() {
       router.post('/echo', function() {
         this.res.json(this.req.body);
       });
-    }, function() {
+
       done();
     });
   });
@@ -109,7 +109,7 @@ describe('request', function() {
         this.res.writeHead(204);
         this.res.end();
       });
-    }, function() {
+      
       done();
     });
   });
