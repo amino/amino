@@ -11,7 +11,7 @@ function inArray(val, arr) {
 }
 
 describe('request', function() {
-  var agent = require('../').init()
+  var agent = require('../')
     .use(require('agent-pubsub-redis'))
     .use(require('agent-req-http'));
 

@@ -1,4 +1,5 @@
-var agent = require('../../').init({debug: true})
+var agent = require('../../')
+  .set('debug')
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 

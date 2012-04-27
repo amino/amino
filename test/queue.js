@@ -11,7 +11,7 @@ function inArray(val, arr) {
 }
 
 describe('queue', function() {
-  var agent = require('../').init()
+  var agent = require('../')
     .use(require('agent-queue-amqp'));
 
   agent.on('error', function(err) {

@@ -18,7 +18,7 @@ publish/subscribe
 
 ```javascript
 // Tell other nodes my name when I start.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-pubsub-redis'));
 
 agent.publish('myname', 'agent99');
@@ -28,7 +28,7 @@ agent.publish('myname', 'agent99');
 
 ```javascript
 // Greet other nodes as they come up.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-pubsub-redis'));
 
 agent.subscribe('myname', function(name) {
@@ -43,7 +43,7 @@ queue/process
 
 ```javascript
 // Add sprocket request to a queue. These things take time.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-queue-amqp'));
 
 var order = {
@@ -58,7 +58,7 @@ console.log('Your order is processing!');
 
 ```javascript
 // Fulfill sprocket requests.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-queue-amqp'));
 
 agent.process('orders', function(order, next) {
@@ -81,7 +81,7 @@ request/respond
 
 ```javascript
 // Create a sprocket service.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
@@ -110,7 +110,7 @@ agent.respond('sprockets', function(router) {
 ```javascript
 // Request a sprocket from the sprocket service.
 // Note that req-http middleware requires pubsub.
-var agent = require('agent').init()
+var agent = require('agent')
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
