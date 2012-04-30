@@ -46,11 +46,7 @@ queue/process
 var agent = require('agent')
   .use(require('agent-queue-amqp'));
 
-var order = {
-  type: 'sprocket-b',
-  spokes: 5
-};
-agent.queue('orders', order);
+agent.queue('orders', {type: 'sprocket-b', spokes: 5});
 console.log('Your order is processing!');
 ```
 
@@ -63,13 +59,10 @@ var agent = require('agent')
 
 agent.process('orders', function(order, next) {
   makeSprocket(order, function(err, sprocket) {
-    if (err) {
-      next(err);
-    }
-    else {
+    if (sprocket) {
       console.log('Created sprocket with id ' + sprocket.id);
-      next();
     }
+    next(err);
   });
 });
 ```
@@ -85,23 +78,11 @@ var agent = require('agent')
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
-// "sprockets" will be our virtual host (for requests to agent://sprockets/...)
-agent.respond('sprockets', function(router) {
-  // router is a director router.
-  // @see https://github.com/flatiron/director
-  router.on('/:sprocketId', function(sprocketId) {
-    // this.req and this.res are http.ServerRequest and http.serverResponse
-    // respectively.
-    // We also have convenience methods:
-    //   - this.res.json(obj, statusCode, leaveOpen = false)
-    //   - this.res.text(text, statusCode, leaveOpen = false)
-    //   - this.res.html(html)
-    // ...for setting the content-type and ending with that data.
-    var self = this;
-    db.sprockets.find({id: sprocketId}, function(err, sprocket) {
-      self.res.json(sprocket);
-    });
+agent.respond('backend', function(router, spec) {
+  router.get('/', function() {
+    this.res.text("Your number is... \n\n" + Math.random() + "\n\nSincerely,\n" + spec.toString());
   });
+  agent.log('listening on ' + spec.toString());
 });
 ```
 
@@ -109,21 +90,12 @@ agent.respond('sprockets', function(router) {
 
 ```javascript
 // Request a sprocket from the sprocket service.
-// Note that req-http middleware requires pubsub.
 var agent = require('agent')
   .use(require('agent-req-http'))
   .use(require('agent-pubsub-redis'));
 
 // Agent.request() is the same as github.com/mikeal/request, except
 // it can handle the agent:// protocol, which uses virtual hosts defined
-// with agent.respond(). json option defaults to true.
-// @see https://github.com/mikeal/request
-agent.request('agent://sprockets/af920c', function (error, response, body) {
-  var sprocket = body;
-  console.log(sprocket);
-});
-// Also usable with vanilla HTTP.
-agent.request('http://icanhazip.com/', function (error, response, body) {
-  console.log('my ip is: ' + body);
-});
+// with agent.respond().
+agent.request('agent://sprockets/af920c').pipe(process.stdout);
 ```
