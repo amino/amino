@@ -79,7 +79,10 @@ var agent = require('agent')
   .use(require('agent-pubsub-redis'));
 
 agent.respond('sprockets', function(router, spec) {
+  // router is a director router.
+  // @see https://github.com/flatiron/director
   router.get('/:id', function(id) {
+    // agent adds the helpers json(), text(), and html().
     this.res.json({id: id});
   });
 });
