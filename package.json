@@ -10,7 +10,8 @@
   },
   "main": "lib/agent.js",
   "dependencies": {
-    "async": "~0.1.18"
+    "async": "~0.1.18",
+    "inherits": "~1.0.0"
   },
   "devDependencies": {
     "mocha": "*"
