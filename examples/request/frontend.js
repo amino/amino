@@ -7,7 +7,12 @@ var http = require('http')
   , server = http.createServer();
 
 server.on('request', function(req, res) {
-  agent.request('agent://backend' + req.url).pipe(res);
+  agent.request('agent://backend' + req.url, function(err, response, body) {
+    if (err) {
+      res.writeHead(500, {'content-type': 'text/plain'});
+      res.end("Could not fulfill request. Please try again later.");
+    }
+  }).pipe(res);
 });
 
 var port = 3000;
