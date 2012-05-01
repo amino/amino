@@ -1,11 +1,11 @@
-var agent = require('../../')
+var amino = require('../../')
   .set('debug')
-  .use(require('agent-req-http'))
-  .use(require('agent-pubsub-redis'));
+  .use(require('amino-request-http'))
+  .use(require('amino-pubsub-redis'));
 
-agent.respond('backend', function(router, spec) {
+amino.respond('backend', function(router, spec) {
   router.get('/', function() {
     this.res.text("Your number is... \n\n" + Math.random() + "\n\nSincerely,\n" + spec.toString());
   });
-  agent.log('listening on ' + spec.toString());
+  amino.log('listening on ' + spec.toString());
 });

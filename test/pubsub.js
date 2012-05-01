@@ -11,31 +11,31 @@ function inArray(val, arr) {
 }
 
 describe('pub/sub', function() {
-  var agent = require('../')
-    .use(require('agent-pubsub-redis'));
+  var amino = require('../')
+    .use(require('amino-pubsub-redis'));
 
-  agent.on('error', function(err) {
+  amino.on('error', function(err) {
     throw err;
   });
   afterEach(function() {
-    if (agent) {
-      agent.reset();
+    if (amino) {
+      amino.reset();
     }
   });
 
   it('should only receive from the subscribed event', function(done) {
     var left = 2;
     var letters = ['A', 'B'];
-    agent.on('subscribe', function(channel, count) {
+    amino.on('subscribe', function(channel, count) {
       if (channel === 'alphabet') {
-        agent.publish('nonsense', 'aefae');
-        agent.publish('alphabet', 'A');
-        agent.publish('nonsense', '23523');
-        agent.publish('nonsense', 'awfad');
-        agent.publish('alphabet', 'B');
+        amino.publish('nonsense', 'aefae');
+        amino.publish('alphabet', 'A');
+        amino.publish('nonsense', '23523');
+        amino.publish('nonsense', 'awfad');
+        amino.publish('alphabet', 'B');
       }
     });
-    agent.subscribe('alphabet', function(letter) {
+    amino.subscribe('alphabet', function(letter) {
       if (inArray(letter, letters)) {
         if (!--left) {
           done();
@@ -48,12 +48,12 @@ describe('pub/sub', function() {
   });
 
   it('can handle objects', function(done) {
-    agent.on('subscribe', function(channel, count) {
+    amino.on('subscribe', function(channel, count) {
       if (channel === 'objects') {
-        agent.publish('objects', {jorge: 'Ben'});
+        amino.publish('objects', {jorge: 'Ben'});
       }
     });
-    agent.subscribe('objects', function(data) {
+    amino.subscribe('objects', function(data) {
       assert.strictEqual(data.jorge, 'Ben', 'object properties can be accessed on sub');
       done();
     });

@@ -1,9 +1,9 @@
-agent
+amino
 =====
 
 Clustered application creation toolkit
 
-**agent** provides a simple API for communicating between nodes in a cluster:
+**amino** provides a simple API for communicating between nodes in a cluster:
 
 - **publish/subcribe** - aka "events"
 - **queue/process** - aka "job queue"
@@ -18,20 +18,20 @@ publish/subscribe
 
 ```javascript
 // Tell other nodes my name when I start.
-var agent = require('agent')
-  .use(require('agent-pubsub-redis'));
+var amino = require('amino')
+  .use(require('amino-pubsub-redis'));
 
-agent.publish('myname', 'agent99');
+amino.publish('myname', 'amino99');
 ```
 
 **subscriber.js**
 
 ```javascript
 // Greet other nodes as they come up.
-var agent = require('agent')
-  .use(require('agent-pubsub-redis'));
+var amino = require('amino')
+  .use(require('amino-pubsub-redis'));
 
-agent.subscribe('myname', function(name) {
+amino.subscribe('myname', function(name) {
   console.log('hello, ' + name + '!');
 });
 ```
@@ -43,10 +43,10 @@ queue/process
 
 ```javascript
 // Add sprocket request to a queue. These things take time.
-var agent = require('agent')
-  .use(require('agent-queue-amqp'));
+var amino = require('amino')
+  .use(require('amino-queue-amqp'));
 
-agent.queue('orders', {type: 'sprocket-b', spokes: 5});
+amino.queue('orders', {type: 'sprocket-b', spokes: 5});
 console.log('Your order is processing!');
 ```
 
@@ -54,10 +54,10 @@ console.log('Your order is processing!');
 
 ```javascript
 // Fulfill sprocket requests.
-var agent = require('agent')
-  .use(require('agent-queue-amqp'));
+var amino = require('amino')
+  .use(require('amino-queue-amqp'));
 
-agent.process('orders', function(order, next) {
+amino.process('orders', function(order, next) {
   makeSprocket(order, function(err, sprocket) {
     if (sprocket) {
       console.log('Created sprocket with id ' + sprocket.id);
@@ -74,15 +74,15 @@ request/respond
 
 ```javascript
 // Create a sprocket service.
-var agent = require('agent')
-  .use(require('agent-req-http'))
-  .use(require('agent-pubsub-redis'));
+var amino = require('amino')
+  .use(require('amino-request-http'))
+  .use(require('amino-pubsub-redis'));
 
-agent.respond('sprockets', function(router, spec) {
+amino.respond('sprockets', function(router, spec) {
   // router is a director router.
   // @see https://github.com/flatiron/director
   router.get('/:id', function(id) {
-    // agent adds the helpers json(), text(), and html().
+    // amino adds the helpers json(), text(), and html().
     this.res.json({id: id});
   });
 });
@@ -92,12 +92,12 @@ agent.respond('sprockets', function(router, spec) {
 
 ```javascript
 // Request a sprocket from the sprocket service.
-var agent = require('agent')
-  .use(require('agent-req-http'))
-  .use(require('agent-pubsub-redis'));
+var amino = require('amino')
+  .use(require('amino-request-http'))
+  .use(require('amino-pubsub-redis'));
 
-// Agent.request() is the same as github.com/mikeal/request, except
-// it can handle the agent:// protocol, which uses virtual hosts defined
-// with agent.respond().
-agent.request('agent://sprockets/af920c').pipe(process.stdout);
+// amino.request() is the same as github.com/mikeal/request, except
+// it can handle the amino:// protocol, which uses virtual hosts defined
+// with amino.respond().
+amino.request('amino://sprockets/af920c').pipe(process.stdout);
 ```

@@ -1,14 +1,13 @@
 {
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
-  "name": "agent",
-  "private": true,
+  "name": "amino",
   "description": "Clustered application creation toolkit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cantina/agent.git"
+    "url": "http://github.com/cantina/amino.git"
   },
-  "main": "lib/agent.js",
+  "main": "lib/amino.js",
   "dependencies": {
     "async": "~0.1.18",
     "inherits": "~1.0.0"

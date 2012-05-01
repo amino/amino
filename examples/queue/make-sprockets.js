@@ -1,6 +1,6 @@
 // Fulfill sprocket requests.
-var agent = require('..').init()
-  .use(require('agent-queue-amqp'));
+var amino = require('..').init()
+  .use(require('amino-queue-amqp'));
 var id = 0;
 
 function makeSprocket(order, done) {
@@ -10,7 +10,7 @@ function makeSprocket(order, done) {
   }, Math.random() * 1000);
 }
 
-agent.process('orders', function(order, next) {
+amino.process('orders', function(order, next) {
   makeSprocket(order, function(err, sprocket) {
     if (err) {
       next(err);

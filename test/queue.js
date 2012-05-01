@@ -11,30 +11,30 @@ function inArray(val, arr) {
 }
 
 describe('queue', function() {
-  var agent = require('../')
-    .use(require('agent-queue-amqp'));
+  var amino = require('../')
+    .use(require('amino-queue-amqp'));
 
-  agent.on('error', function(err) {
+  amino.on('error', function(err) {
     throw err;
   });
   afterEach(function() {
-    if (agent) {
-      agent.reset();
+    if (amino) {
+      amino.reset();
     }
   });
 
   it('should only receive from the subscribed queue', function(done) {
     var left = 4;
     var beatles = ['Ringo', 'John', 'Paul', 'George'];
-    agent.queue('u2', 'Bono');
-    agent.queue('jimi', 'Hendrix');
-    agent.queue('mamas', 'Cass');
-    agent.queue('beatles', 'John');
-    agent.queue('beatles', 'George');
-    agent.queue('cream', 'Eric');
-    agent.queue('beatles', 'Paul');
+    amino.queue('u2', 'Bono');
+    amino.queue('jimi', 'Hendrix');
+    amino.queue('mamas', 'Cass');
+    amino.queue('beatles', 'John');
+    amino.queue('beatles', 'George');
+    amino.queue('cream', 'Eric');
+    amino.queue('beatles', 'Paul');
 
-    agent.process('beatles', function(data, next) {
+    amino.process('beatles', function(data, next) {
       if (inArray(data, beatles)) {
         if (!--left) {
           done();
@@ -46,13 +46,13 @@ describe('queue', function() {
       next();
     });
 
-    agent.queue('beatles', 'Ringo');
+    amino.queue('beatles', 'Ringo');
   });
 
   it('should be able to handle objects', function(done) {
-    agent.queue('jazz', {name: 'Bill Evans'});
+    amino.queue('jazz', {name: 'Bill Evans'});
 
-    agent.process('jazz', function(data, next) {
+    amino.process('jazz', function(data, next) {
       assert.strictEqual(data.name, 'Bill Evans', 'Object property can be accessed');
       done();
     });

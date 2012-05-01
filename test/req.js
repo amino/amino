@@ -11,21 +11,21 @@ function inArray(val, arr) {
 }
 
 describe('request', function() {
-  var agent = require('../')
-    .use(require('agent-pubsub-redis'))
-    .use(require('agent-req-http'));
+  var amino = require('../')
+    .use(require('amino-pubsub-redis'))
+    .use(require('amino-request-http'));
 
-  agent.on('error', function(err) {
+  amino.on('error', function(err) {
     throw err;
   });
   afterEach(function() {
-    if (agent) {
-      agent.reset();
+    if (amino) {
+      amino.reset();
     }
   });
 
   before(function(done) {
-    agent.respond('math.edu', function(router) {
+    amino.respond('math.edu', function(router) {
       router.get('/square/:input', function(input) {
         var data = Math.pow(input, 2);
         this.res.json(data);
@@ -46,7 +46,7 @@ describe('request', function() {
   
   var posts = [];
   before(function(done) {
-    agent.respond('cloudpost', function(router) {
+    amino.respond('cloudpost', function(router) {
       var currentId = 1;
       function getPost(id) {
         id = parseInt(id);
@@ -78,7 +78,7 @@ describe('request', function() {
         post.id = currentId++;
         posts.push(post);
 
-        this.res.setHeader('location', 'agent://' + this.req.headers.host.split(':')[0] + '/posts/' + post.id);
+        this.res.setHeader('location', 'amino://' + this.req.headers.host.split(':')[0] + '/posts/' + post.id);
         this.res.writeHead(201);
         this.res.end();
       });
@@ -117,7 +117,7 @@ describe('request', function() {
   it('returns correct answer', function(done) {
     var input = Math.round(100 * Math.random());
 
-    agent.request('agent://math.edu/square/' + input, function(err, res, data) {
+    amino.request('amino://math.edu/square/' + input, function(err, res, data) {
       assert.strictEqual(data, input * input, 'Square correctly returned');
       assert.ifError(err);
       done(err);
@@ -127,7 +127,7 @@ describe('request', function() {
   it('returns 404', function(done) {
     var input = 100 * Math.random();
 
-    agent.request('agent://math.edu/round?input=' + input, function(err, res, data) {
+    amino.request('amino://math.edu/round?input=' + input, function(err, res, data) {
       assert.strictEqual(data, 'Page not found', 'res.data is error message');
       assert.strictEqual(res.statusCode, 404, 'res.code is 404');
       assert.ifError(err);
@@ -136,7 +136,7 @@ describe('request', function() {
   });
 
   it('returns 500', function(done) {
-    agent.request('agent://math.edu/meaning-of-life', function(err, res, data) {
+    amino.request('amino://math.edu/meaning-of-life', function(err, res, data) {
       assert.strictEqual(data, "Can't calculate!", 'res.data is error message');
       assert.strictEqual(res.statusCode, 500, 'res.code is 500');
       assert.ifError(err);
@@ -147,10 +147,10 @@ describe('request', function() {
   it('can transparently serialize/unserialize JSON', function(done) {
     var options = {
       method: 'POST',
-      url: 'agent://math.edu/echo',
+      url: 'amino://math.edu/echo',
       body: {some: 'pig', name: 'wilbur', age: 2, size: '20 lbs.', friends: ['charlotte', 'fern']}
     };
-    agent.request(options, function(err, res, data) {
+    amino.request(options, function(err, res, data) {
       assert.deepEqual(data, options.body, 'data returned is identical to what was sent');
       assert.ifError(err);
       done();
@@ -159,7 +159,7 @@ describe('request', function() {
 
   describe('example REST server', function() {
     it('empty list', function(done) {
-      agent.request('agent://cloudpost/posts', function(err, response, body) {
+      amino.request('amino://cloudpost/posts', function(err, response, body) {
         assert.deepEqual(body, [], 'body is an empty array');
         assert.ifError(err);
         done();
@@ -168,11 +168,11 @@ describe('request', function() {
 
     var post = {title: 'My first blog post', content: 'Hello world!'};
     it('can post', function(done) {
-      agent.request({method: 'POST', url: 'agent://cloudpost/posts', body: post}, function(err, response, body) {
+      amino.request({method: 'POST', url: 'amino://cloudpost/posts', body: post}, function(err, response, body) {
         assert.strictEqual(response.statusCode, 201, 'response code is 201 (created)');
         assert.ok(response.headers.location, 'has location header');
         assert.ifError(err);
-        agent.request(response.headers.location, function(err, response, body) {
+        amino.request(response.headers.location, function(err, response, body) {
           assert.strictEqual(body.title, post.title, 'post title is same');
           assert.ok(body.id, 'post has an id');
           post.id = body.id;
@@ -185,7 +185,7 @@ describe('request', function() {
     it('can put', function(done) {
       post.title = 'My first blog post (edited)';
       post.content = 'Goodbye earth...';
-      agent.request({method: 'PUT', url: 'agent://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
+      amino.request({method: 'PUT', url: 'amino://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
         assert.strictEqual(response.statusCode, 200, 'response code is 200 (ok)');
         assert.strictEqual(body.title, post.title, 'post title was edited');
         assert.strictEqual(body.content, post.content, 'post content was edited');
@@ -199,13 +199,13 @@ describe('request', function() {
       post.id = 1337;
       post.title = 'My second blog post!!!';
       post.content = 'This is getting boring.';
-      agent.request({method: 'PUT', url: 'agent://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
+      amino.request({method: 'PUT', url: 'amino://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
         assert.strictEqual(response.statusCode, 200, 'response code is 200 (ok)');
         assert.strictEqual(body.title, post.title, 'post title was edited');
         assert.strictEqual(body.content, post.content, 'post content was edited');
         assert.strictEqual(body.id, post.id, 'id is the same');
         assert.ifError(err);
-        agent.request({method: 'GET', url: 'agent://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
+        amino.request({method: 'GET', url: 'amino://cloudpost/posts/' + post.id, body: post}, function(err, response, body) {
           assert.strictEqual(response.statusCode, 200, 'response code is 200 (ok)');
           assert.strictEqual(body.title, post.title, 'post title was edited');
           assert.strictEqual(body.content, post.content, 'post content was edited');
@@ -217,7 +217,7 @@ describe('request', function() {
     });
 
     it('can list', function(done) {
-      agent.request('agent://cloudpost/posts', function(err, response, body) {
+      amino.request('amino://cloudpost/posts', function(err, response, body) {
         assert.strictEqual(body.length, 2, 'two posts found');
         assert.ok(body[0].title, 'post has a title');
         assert.ifError(err);
@@ -226,12 +226,12 @@ describe('request', function() {
     });
 
     it('can delete', function(done) {
-      agent.request({method: 'DELETE', url: 'agent://cloudpost/posts/2'}, function(err, response, body) {
+      amino.request({method: 'DELETE', url: 'amino://cloudpost/posts/2'}, function(err, response, body) {
         assert.strictEqual(response.statusCode, 204, 'response code is 204 (no content)');
         // 204 must not return a body
         assert.ifError(body);
         assert.ifError(err);
-        agent.request('agent://cloudpost/posts/2', function(err, response, body) {
+        amino.request('amino://cloudpost/posts/2', function(err, response, body) {
           assert.strictEqual(response.statusCode, 404, 'post not found');
           assert.ifError(err);
           done();
@@ -240,7 +240,7 @@ describe('request', function() {
     });
 
     it('supports HTTP', function(done) {
-      agent.request('http://icanhazip.com/', function(err, response, body) {
+      amino.request('http://icanhazip.com/', function(err, response, body) {
         assert.ok(body.match(/([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})/), 'request to outside HTTP made');
         done();
       });
