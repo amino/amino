@@ -44,9 +44,10 @@ describe('request', function() {
     });
   });
   
-  var posts = [];
+  var posts = [], mySpec;
   before(function(done) {
-    amino.respond('cloudpost', function(router) {
+    amino.respond('cloudpost', function(router, spec) {
+      mySpec = spec;
       var currentId = 1;
       function getPost(id) {
         id = parseInt(id);
@@ -240,8 +241,8 @@ describe('request', function() {
     });
 
     it('supports HTTP', function(done) {
-      amino.request('http://icanhazip.com/', function(err, response, body) {
-        assert.ok(body.match(/([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})/), 'request to outside HTTP made');
+      amino.request('http://' + mySpec.host + ':' + mySpec.port + '/posts', function(err, response, body) {
+        assert.strictEqual(response.statusCode, 200, 'requests can go through standard HTTP');
         done();
       });
     });
