@@ -1,4 +1,7 @@
-var assert = require('assert');
+var assert = require('assert')
+  , inherits = require('inherits')
+  , stream = require('stream')
+  ;
 
 function inArray(val, arr) {
   var i = arr.length;
@@ -8,6 +11,27 @@ function inArray(val, arr) {
     }
   }
   return false;
+}
+
+function ValidationStream(str, cb) {
+  this.str = str
+  this.buf = ''
+  this.on('data', function (data) {
+    this.buf += data
+  })
+  this.on('end', function () {
+    assert.strictEqual(this.str, this.buf)
+    if (cb) cb();
+  })
+  this.writable = true
+}
+inherits(ValidationStream, stream.Stream)
+ValidationStream.prototype.write = function (chunk) {
+  this.emit('data', chunk)
+}
+ValidationStream.prototype.end = function (chunk) {
+  if (chunk) emit('data', chunk)
+  this.emit('end')
 }
 
 describe('request', function() {
@@ -61,6 +85,20 @@ describe('request', function() {
       router.get('/posts', function() {
         var data = posts;
         this.res.json(data);
+      });
+
+      router.post('/posts/stream', {stream: true}, function() {
+        var streamChunks = [], req = this.req, res = this.res;
+        req.on('data', function(chunk) {
+          streamChunks.push(chunk);
+        });
+        req.on('end', function() {
+          assert.strictEqual(streamChunks.length, 4, 'correct number of chunks received');
+          ['e', 'f', 'g', 'h'].forEach(function(chunk) {
+            res.write(chunk);
+          });
+          res.end();
+        });
       });
 
       router.get('/posts/:id', function(id) {
@@ -245,6 +283,23 @@ describe('request', function() {
         assert.strictEqual(response.statusCode, 200, 'requests can go through standard HTTP');
         done();
       });
+    });
+
+    it('can stream data', function(done) {
+      var inputStream = new ValidationStream('abcd');
+      var outputStream = new ValidationStream('efgh', done);
+
+      var options = {
+        method: 'POST',
+        url: 'amino://cloudpost/posts/stream',
+      };
+
+      inputStream.pipe(amino.request(options)).pipe(outputStream);
+
+      for (var i = 0, len = inputStream.str.length; i < len; i++) {
+        inputStream.write(inputStream.str[i]);
+      }
+      inputStream.end();
     });
   });
 });
