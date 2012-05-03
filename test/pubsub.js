@@ -11,8 +11,7 @@ function inArray(val, arr) {
 }
 
 describe('pub/sub', function() {
-  var amino = require('../')
-    .use(require('amino-pubsub-redis'));
+  var amino = require('../');
 
   amino.on('error', function(err) {
     throw err;

@@ -11,8 +11,7 @@ function inArray(val, arr) {
 }
 
 describe('queue', function() {
-  var amino = require('../')
-    .use(require('amino-queue-amqp'));
+  var amino = require('../');
 
   amino.on('error', function(err) {
     throw err;

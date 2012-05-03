@@ -35,9 +35,7 @@ ValidationStream.prototype.end = function (chunk) {
 }
 
 describe('request', function() {
-  var amino = require('../')
-    .use(require('amino-pubsub-redis'))
-    .use(require('amino-request-http'));
+  var amino = require('../');
 
   amino.on('error', function(err) {
     throw err;
@@ -88,12 +86,13 @@ describe('request', function() {
       });
 
       router.post('/posts/stream', {stream: true}, function() {
-        var streamChunks = [], req = this.req, res = this.res;
+        var chunks = [], req = this.req, res = this.res;
         req.on('data', function(chunk) {
-          streamChunks.push(chunk);
+          chunks.push(chunk);
         });
         req.on('end', function() {
-          assert.strictEqual(streamChunks.length, 4, 'correct number of chunks received');
+          assert.strictEqual(chunks.length, 4, 'correct number of chunks received');
+          assert.strictEqual(chunks.join(''), 'abcd', 'request body OK');
           ['e', 'f', 'g', 'h'].forEach(function(chunk) {
             res.write(chunk);
           });
