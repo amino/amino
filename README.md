@@ -129,6 +129,7 @@ amino.process('orders', function(order, next) {
 // Create a sprocket service.
 var amino = require('amino');
 
+// "sprockets" will be our virtual host.
 amino.respond('sprockets', function(router, spec) {
   // router is a director router.
   // @see https://github.com/flatiron/director
