@@ -2,7 +2,7 @@
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "amino",
   "description": "Clustered application creation toolkit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": {
     "type": "git",
     "url": "http://github.com/cantina/amino.git"
@@ -19,7 +19,7 @@
   "optionalDependencies": {
     "amino-driver-redis": "~0.2.0",
     "amino-driver-amqp": "~0.2.0",
-    "amino-driver-http": "~0.2.0"
+    "amino-driver-http": "~0.3.0"
   },
   "engines": {
     "node": ">= 0.6.0"
