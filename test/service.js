@@ -34,7 +34,7 @@ describe('service', function() {
     // Set up 3 services to test load balancing/failover
     var left = 3;
     for (var i = 0; i < 3; i++) {
-      var service = amino.createService('test');
+      var service = amino.createService('test@1.0.0');
 
       (function(service) {
         service.once('spec', function(spec) {
@@ -85,4 +85,7 @@ describe('service', function() {
       })(req);
     }
   });
+
+  it('should failover');
+  it('should support versions');
 });
