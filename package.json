@@ -14,7 +14,8 @@
     "semver": "~1.0.13"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "async": "*"
   },
   "optionalDependencies": {
     "amino-driver-redis": "~0.2.0",
