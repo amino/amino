@@ -51,7 +51,7 @@ describe('service', function() {
               cb(null, service);
             });
           });
-        })(amino.createService('test@1.0.0'));
+        })(amino.createService('test'));
       });
     }
     async.parallel(tasks, function(err, results) {
@@ -145,11 +145,11 @@ describe('service', function() {
     before(function(done) {
       var tasks = [];
       tasks.push(function(cb) {
-        var service = amino.createService('test@2.0.0');
+        var service = amino.createService('test@1.1.0');
         service.once('spec', function(spec) {
           service.server = net.createServer(function(socket) {
             socket.on('data', function(data) {
-              socket.end(data.toString() + ':' + spec.id + ':2');
+              socket.end(data.toString() + ':' + spec.id + ':1');
             });
           });
           service.server.listen(spec.port, function() {
@@ -194,12 +194,112 @@ describe('service', function() {
       }
 
       async.series(tasks, function(err, results) {
-        assert.ok(hadError, 'one error happened');
+        assert(hadError, 'one error happened');
         results.shift();
         assert.strictEqual(results.length, 6, '6 responses came back');
         done();
       });
     });
   });
-  it('should support versions');
+  describe('versioning', function() {
+    before(function(done) {
+      var service = amino.createService('test@1.2.0');
+      service.once('spec', function(spec) {
+        service.server = net.createServer(function(socket) {
+          socket.on('data', function(data) {
+            socket.end(data.toString() + ':' + spec.id + ':2');
+          });
+        });
+        service.server.listen(spec.port, function() {
+          done();
+        });
+      });
+    });
+    it('should respect req @1.1.0', function(done) {
+      var tasks = [];
+
+      // Send 6 requests @1.1.0
+      for (var i = 0; i < 6; i++) {
+        tasks.push(function(cb) {
+          (function(req) {
+            req.on('error', function(err) {
+              assert.ifError(err);
+            });
+            req.on('connect', function() {
+              req.write('hello');
+            });
+            req.on('data', function(data) {
+              assert(data.match(/:1$/), 'response has ":1" at the end');
+              cb(null, data);
+            });
+          })(new MockRequest('test@1.1.0'));
+        });
+      }
+      async.parallel(tasks, function(err, results) {
+        assert.strictEqual(results.length, 6, 'all responses received');
+        done();
+      });
+    });
+    it('should respect req @1.2.0', function(done) {
+      var tasks = [];
+
+      // Send 6 requests @1.2.0
+      for (var i = 0; i < 6; i++) {
+        tasks.push(function(cb) {
+          (function(req) {
+            req.on('error', function(err) {
+              assert.ifError(err);
+            });
+            req.on('connect', function() {
+              req.write('hello');
+            });
+            req.on('data', function(data) {
+              assert(data.match(/:2$/), 'response has ":2" at the end');
+              cb(null, data);
+            });
+          })(new MockRequest('test@1.2.0'));
+        });
+      }
+      async.parallel(tasks, function(err, results) {
+        assert.strictEqual(results.length, 6, 'all responses received');
+        done();
+      });
+    });
+    it('should respect ranges', function(done) {
+      var tasks = [];
+
+      // Send 6 requests @1.x
+      for (var i = 0; i < 6; i++) {
+        tasks.push(function(cb) {
+          (function(req) {
+            req.on('error', function(err) {
+              assert.ifError(err);
+            });
+            req.on('connect', function() {
+              req.write('hello');
+            });
+            req.on('data', function(data) {
+              cb(null, data);
+            });
+          })(new MockRequest('test@1.x'));
+        });
+      }
+      async.parallel(tasks, function(err, results) {
+        var version1 = [], version2 = [];
+        results.forEach(function(result) {
+          // We should get at least 3 responses from each server.
+          if (result.match(/:1$/)) {
+            version1.push(result);
+          }
+          else if (result.match(/:2$/)) {
+            version2.push(result);
+          }
+        });
+        assert.strictEqual(version1.length, 3, '3 responses from version 1');
+        assert.strictEqual(version2.length, 3, '3 responses from version 2');
+        assert.strictEqual(results.length, 6, '6 responses total');
+        done();
+      });
+    });
+  });
 });
