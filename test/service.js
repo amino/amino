@@ -21,6 +21,11 @@ function MockRequest(service) {
     self.socket.setTimeout(100);
     self.socket.setEncoding('utf8');
   });
+  var parts = service.split('@');
+  if (parts[1]) {
+    service = parts[0];
+    self.headers = {'X-Amino-Version': parts[1]};
+  }
   amino.globalAgent.addRequest(this, service);
 };
 inherits(MockRequest, EventEmitter);
@@ -215,6 +220,15 @@ describe('service', function() {
         });
       });
     });
+    before(function(done) {
+      // Also test versioning with HTTP
+      amino.respond('test@2.0.0', function(router) {
+        router.get('/', function() {
+          this.res.text('OK');
+        });
+        done();
+      });
+    });
     it('should respect req @1.1.0', function(done) {
       var tasks = [];
 
@@ -298,6 +312,18 @@ describe('service', function() {
         assert.strictEqual(version1.length, 3, '3 responses from version 1');
         assert.strictEqual(version2.length, 3, '3 responses from version 2');
         assert.strictEqual(results.length, 6, '6 responses total');
+        done();
+      });
+    });
+    it('should work with HTTP', function(done) {
+      var req = amino.request({url: 'amino://test/', headers: {'x-amino-version': '2.x'}}, function(err, response, body) {
+        assert.strictEqual(body, 'OK', '2.x request made');
+        done();
+      });
+    });
+    it('unsatisfied version times out', function(done) {
+      var req = amino.request({url: 'amino://test/', headers: {'x-amino-version': '3.x'}, timeout: 100}, function(err, response, body) {
+        assert.strictEqual(err.code, 'ETIMEDOUT', 'request timed out');
         done();
       });
     });

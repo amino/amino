@@ -47,7 +47,7 @@ describe('request', function() {
   });
 
   before(function(done) {
-    amino.respond('math.edu', function(router) {
+    amino.respond('math.edu@1.0.0', function(router) {
       router.get('/square/:input', function(input) {
         var data = Math.pow(input, 2);
         this.res.json(data);
@@ -65,7 +65,7 @@ describe('request', function() {
       done();
     });
   });
-  
+
   var posts = [], mySpec;
   before(function(done) {
     amino.respond('cloudpost', function(router, spec) {
@@ -147,7 +147,7 @@ describe('request', function() {
         this.res.writeHead(204);
         this.res.end();
       });
-      
+
       done();
     });
   });
@@ -155,6 +155,7 @@ describe('request', function() {
   it('returns correct answer', function(done) {
     var input = Math.round(100 * Math.random());
 
+    // Let's throw some versioning in there for good measure.
     amino.request('amino://math.edu/square/' + input, function(err, res, data) {
       assert.strictEqual(data, input * input, 'Square correctly returned');
       assert.ifError(err);
@@ -208,11 +209,11 @@ describe('request', function() {
     it('can post', function(done) {
       amino.request({method: 'POST', url: 'amino://cloudpost/posts', body: post}, function(err, response, body) {
         assert.strictEqual(response.statusCode, 201, 'response code is 201 (created)');
-        assert.ok(response.headers.location, 'has location header');
+        assert(response.headers.location, 'has location header');
         assert.ifError(err);
         amino.request(response.headers.location, function(err, response, body) {
           assert.strictEqual(body.title, post.title, 'post title is same');
-          assert.ok(body.id, 'post has an id');
+          assert(body.id, 'post has an id');
           post.id = body.id;
           assert.ifError(err);
           done();
@@ -257,7 +258,7 @@ describe('request', function() {
     it('can list', function(done) {
       amino.request('amino://cloudpost/posts', function(err, response, body) {
         assert.strictEqual(body.length, 2, 'two posts found');
-        assert.ok(body[0].title, 'post has a title');
+        assert(body[0].title, 'post has a title');
         assert.ifError(err);
         done();
       });
