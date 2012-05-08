@@ -28,6 +28,10 @@ Setup
 If you have redis and RabbitMQ servers running locally on the default ports, all
 you need to get started is:
 
+```bash
+$ npm install amino
+```
+
 ```javascript
 var amino = require('amino');
 
