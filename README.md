@@ -193,13 +193,16 @@ function HelloRequest() {
   self.once('spec', function(spec) {
     self.socket = net.createConnection(spec.port);
     self.socket.setEncoding('utf8');
+    self.socket.on('data', function(data) {
+      self.emit('data', data);
+    });
   });
   amino.globalAgent.addRequest(this, 'hello');
 };
 util.inherits(HelloRequest, EventEmitter);
 
 var req = new HelloRequest();
-req.socket.on('data', function(data) {
+req.on('data', function(data) {
   // data is "hello world"
 });
 ```
