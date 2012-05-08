@@ -178,7 +178,7 @@ var service = amino.createService('hello@1.0.0', function(spec) {
 });
 ```
 
-***use-service.js**
+**use-service.js**
 
 ```javascript
 // Connect to the hello service
