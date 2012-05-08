@@ -184,7 +184,8 @@ var service = amino.createService('hello@1.0.0', function(spec) {
 // Connect to the hello service
 var amino = require('amino')
   , net = require('net')
-  , util = require('util');
+  , util = require('util')
+  , EventEmitter = require('events').EventEmitter;
 
 function HelloRequest() {
   var self = this;
