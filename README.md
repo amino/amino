@@ -17,8 +17,10 @@ The API provides:
     between nodes in your cluster. (default driver: [redis](https://github.com/mranney/node_redis))
   - **queue** -- Use `amino.queue()` and `amino.process()` to queue jobs and
     process them. (default driver: [amqp](https://github.com/postwait/node-amqp), i.e. RabbitMQ)
-  - **request** -- Use `amino.request()` and `amino.respond()` to set up REST
+  - **request** -- Use `amino.request()` and `amino.respond()` to easily create REST
     APIs with auto-load-balancing and failover. (default driver: HTTP, uses pub/sub)
+  - **service** -- Advanced: Use `amino.createService()` to register a service, and receive a port
+    to listen on. This allows you to create generic TCP services.
 
 Setup
 -----
@@ -53,7 +55,8 @@ like this (default conf located in `etc/amino.json`)
     },
     "request": {
       "driver": "http"
-    }
+    },
+    "range": [50000, 60000]
   }
 }
 ```
@@ -66,7 +69,7 @@ $ node myapp.js --conf /path/to/my/amino.json
 
 Or to use a system-wide conf, you can put one at `/etc/amino.json`.
 
-At the moment, there are no other selectable drivers. More coming soon!
+__At the moment, there are no other selectable drivers. More coming soon!__
 
 API
 ---
@@ -129,8 +132,9 @@ amino.process('orders', function(order, next) {
 // Create a sprocket service.
 var amino = require('amino');
 
-// "sprockets" will be our virtual host.
-amino.respond('sprockets', function(router, spec) {
+// "sprockets" will be our virtual host. We'll also tag it with
+// a version (2.1.0) for requests to filter by.
+amino.respond('sprockets@2.1.0', function(router, spec) {
   // router is a director router.
   // @see https://github.com/flatiron/director
   router.get('/:id', function(id) {
@@ -150,4 +154,51 @@ var amino = require('amino');
 // it can handle the amino:// protocol, which uses virtual hosts defined
 // with amino.respond().
 amino.request('amino://sprockets/af920c').pipe(process.stdout);
+
+// To limit the request to hosts running sprockets v2.x, we can use a special header:
+amino.request({url: 'amino://sprockets/af920c', headers: {'x-amino-version': '2.x'}}).pipe(process.stdout);
+```
+
+### createService (Advanced)
+
+**create-service.js**
+
+```javascript
+// Create a TCP service which sends "hello world"
+var amino = require('amino')
+  , net = require('net');
+
+var server = net.createServer(function(socket) {
+  socket.on('data', function(data) {
+    socket.end('hello world');
+  });
+});
+var service = amino.createService('hello@1.0.0', function(spec) {
+  server.listen(spec.port);
+});
+```
+
+***use-service.js**
+
+```javascript
+// Connect to the hello service
+var amino = require('amino')
+  , net = require('net')
+  , util = require('util');
+
+function HelloRequest() {
+  var self = this;
+  self.headers = {'x-amino-version': '1.x'};
+  self.once('spec', function(spec) {
+    self.socket = net.createConnection(spec.port);
+    self.socket.setEncoding('utf8');
+  });
+  amino.globalAgent.addRequest(this, 'hello');
+};
+util.inherits(HelloRequest, EventEmitter);
+
+var req = new HelloRequest();
+req.socket.on('data', function(data) {
+  // data is "hello world"
+});
 ```
