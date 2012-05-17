@@ -188,25 +188,19 @@ var service = amino.createService('hello@1.0.0', function(spec) {
 // Connect to the hello service
 var amino = require('amino')
   , net = require('net')
-  , util = require('util')
-  , EventEmitter = require('events').EventEmitter;
+  , req
+  , socket
+  ;
 
-function HelloRequest() {
-  var self = this;
-  self.headers = {'x-amino-version': '1.x'};
-  self.once('spec', function(spec) {
-    self.socket = net.createConnection(spec.port);
-    self.socket.setEncoding('utf8');
-    self.socket.on('data', function(data) {
-      self.emit('data', data);
-    });
+req = amino.requestService('hello');
+req.on('spec', function() {
+  socket = net.createConnection(spec.port);
+  socket.setEncoding('utf8');
+  socket.on('data', function(data) {
+    // data is "hello world"
   });
-  amino.globalAgent.addRequest(this, 'hello');
-};
-util.inherits(HelloRequest, EventEmitter);
-
-var req = new HelloRequest();
-req.on('data', function(data) {
-  // data is "hello world"
+  socket.on('error', function(err) {
+    req.emit('error', err);
+  });
 });
 ```
