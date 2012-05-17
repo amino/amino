@@ -1,42 +1,32 @@
 var amino = require('../')
-  , EventEmitter = require('events').EventEmitter
-  , inherits = require('inherits')
   , net = require('net')
   , assert = require('assert')
   , async = require('async')
   ;
 
-function MockRequest(service) {
-  var self = this;
-  self.once('spec', function(spec) {
-    self.socket = net.createConnection(spec.port, function() {
-      self.emit('connect');
+function create_request(service, version) {
+  var req = amino.requestService(service, version);
+  req.once('spec', function(spec) {
+    req.socket = net.createConnection(spec.port, function() {
+      req.emit('connect');
     });
-    self.socket.on('data', function(data) {
-      self.emit('data', data);
+    req.socket.on('data', function(data) {
+      req.emit('data', data);
     });
-    self.socket.on('error', function(err) {
-      self.emit('error', err);
+    req.socket.on('error', function(err) {
+      req.emit('error', err);
     });
-    self.socket.setTimeout(100);
-    self.socket.setEncoding('utf8');
+    req.socket.setTimeout(100);
+    req.socket.setEncoding('utf8');
   });
-  var parts = service.split('@');
-  if (parts[1]) {
-    service = parts[0];
-    self.headers = {'X-Amino-Version': parts[1]};
-  }
-  amino.globalAgent.addRequest(this, service);
-};
-inherits(MockRequest, EventEmitter);
-
-MockRequest.prototype.write = function() {
-  this.socket.write.apply(this.socket, arguments);
-};
-
-MockRequest.prototype.end = function() {
-  this.socket.end.apply(this.socket, arguments);
-};
+  req.write = function() {
+    req.socket.write.apply(req.socket, arguments);
+  };
+  req.end = function() {
+    req.socket.end.apply(req.socket, arguments);
+  };
+  return req;
+}
 
 describe('service', function() {
   var services;
@@ -92,7 +82,7 @@ describe('service', function() {
             expected.splice(index, 1);
             cb();
           });
-        })(new MockRequest('test'));
+        })(create_request('test'));
       });
     }
     async.parallel(tasks, function(err, results) {
@@ -137,7 +127,7 @@ describe('service', function() {
               assert.strictEqual(data, 'hello:' + services[2].spec.id);
               cb(null, data);
             });
-          })(new MockRequest('test'));
+          })(create_request('test'));
         });
       }
       async.parallel(tasks, function(err, results) {
@@ -177,7 +167,7 @@ describe('service', function() {
     it('should failover', function(done) {
       var tasks = [], hadError = false;
       tasks.push(function(cb) {
-        var req = new MockRequest('test');
+        var req = create_request('test');
         req.on('error', function(err) {
           assert.strictEqual(err.code, 'ECONNREFUSED', 'server is down');
           hadError = true;
@@ -194,7 +184,7 @@ describe('service', function() {
             req.on('connect', function() {
               cb(null, 1);
             });
-          })(new MockRequest('test'));
+          })(create_request('test'));
         });
       }
 
@@ -246,7 +236,7 @@ describe('service', function() {
               assert(data.match(/:1$/), 'response has ":1" at the end');
               cb(null, data);
             });
-          })(new MockRequest('test@1.1.0'));
+          })(create_request('test', '1.1.0'));
         });
       }
       async.parallel(tasks, function(err, results) {
@@ -271,7 +261,7 @@ describe('service', function() {
               assert(data.match(/:2$/), 'response has ":2" at the end');
               cb(null, data);
             });
-          })(new MockRequest('test@1.2.0'));
+          })(create_request('test', '1.2.0'));
         });
       }
       async.parallel(tasks, function(err, results) {
@@ -295,7 +285,7 @@ describe('service', function() {
             req.on('data', function(data) {
               cb(null, data);
             });
-          })(new MockRequest('test@1.x'));
+          })(create_request('test', '1.x'));
         });
       }
       async.parallel(tasks, function(err, results) {
