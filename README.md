@@ -192,7 +192,7 @@ var amino = require('amino')
   , socket
   ;
 
-req = amino.requestService('hello');
+req = amino.requestService('hello', '1.x');
 req.on('spec', function() {
   socket = net.createConnection(spec.port);
   socket.setEncoding('utf8');
