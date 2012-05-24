@@ -319,3 +319,34 @@ describe('service', function() {
     });
   });
 });
+
+describe('manual service', function() {
+  var service;
+  before(function(done) {
+    var spec = new amino.Spec({service: 'foo', port: 99999, host: 'localhost'});
+    service = amino.createService(spec);
+    service.server = net.createServer(function(socket) {
+      socket.on('data', function(data) {
+        socket.end(data.toString());
+      });
+    });
+    service.server.listen(spec.port, function() {
+      done();
+    });
+  });
+
+  after(function(done) {
+    service.close(done);
+  });
+
+  it('can serve requests from manually created service', function(done) {
+    var req = create_request('foo');
+    req.on('connect', function() {
+      req.write('wasssssup');
+    });
+    req.on('data', function(data) {
+      assert.strictEqual(data, 'wasssssup', 'response expected');
+      done();
+    });
+  });
+});
