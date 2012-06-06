@@ -173,12 +173,11 @@ var amino = require('amino')
   , net = require('net');
 
 var server = net.createServer(function(socket) {
-  socket.on('data', function(data) {
-    socket.end('hello world');
-  });
+  socket.write("hello world");
 });
-var service = amino.createService('hello@1.0.0', function(spec) {
+var service = amino.createService('hello@1.1.0', function(spec) {
   server.listen(spec.port);
+  console.log('listening on port ' + spec.port);
 });
 ```
 
@@ -195,12 +194,13 @@ var amino = require('amino')
 req = amino.requestService('hello', '1.x');
 req.on('spec', function(spec) {
   socket = net.createConnection(spec.port);
+  socket.on('connect', function() {
+    console.log('connected to hello service version ' + spec.version);
+  });
   socket.setEncoding('utf8');
   socket.on('data', function(data) {
-    // data is "hello world"
-  });
-  socket.on('error', function(err) {
-    req.emit('error', err);
+    // data should be "hello world"
+    console.log(data);
   });
 });
 ```
