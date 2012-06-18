@@ -18,7 +18,7 @@
     "async": "*"
   },
   "optionalDependencies": {
-    "amino-driver-redis": "~0.2.0",
+    "amino-driver-redis": "~0.3.1",
     "amino-driver-amqp": "~0.2.0",
     "amino-driver-http": "0.4.1"
   },

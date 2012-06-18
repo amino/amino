@@ -3,8 +3,7 @@
     "pubsub": {
       "driver": "redis",
       "options": {
-        "host": "localhost",
-        "port": 6379
+        "nodes": ["localhost:6379"]
       }
     },
     "queue": {
