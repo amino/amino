@@ -47,8 +47,7 @@ like this (default conf located in `etc/amino.json`)
     "pubsub": {
       "driver": "redis",
       "options": {
-        "host": "localhost",
-        "port": 6379
+        "nodes": ["localhost:6379"]
       }
     },
     "queue": {
@@ -70,6 +69,9 @@ To override this, you can do:
 ```bash
 $ node myapp.js --conf /path/to/my/amino.json
 ```
+
+Or to use an app-level conf, copy `amino.json` to an `etc` folder in your process's
+`cwd`. Alternatively, it can be named `app.json` or `conf.json`.
 
 Or to use a system-wide conf, you can put one at `/etc/amino.json`.
 
