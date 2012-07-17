@@ -1,14 +1,6 @@
-var assert = require('assert');
-
-function inArray(val, arr) {
-  var i = arr.length;
-  while (i--) {
-    if (arr[i] === val) {
-      return true;
-    }
-  }
-  return false;
-}
+var assert = require('assert')
+  , inArray = require('./helpers/inArray.js')
+  ;
 
 describe('pub/sub', function() {
   var amino = require('../');

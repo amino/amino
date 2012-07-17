@@ -1,38 +1,6 @@
-var assert = require('assert')
-  , inherits = require('inherits')
-  , stream = require('stream')
+var assert = require('assert')  
+  , ValidationStream = require('./helpers/ValidationStream')
   ;
-
-function inArray(val, arr) {
-  var i = arr.length;
-  while (i--) {
-    if (arr[i] === val) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function ValidationStream(str, cb) {
-  this.str = str
-  this.buf = ''
-  this.on('data', function (data) {
-    this.buf += data
-  })
-  this.on('end', function () {
-    assert.strictEqual(this.str, this.buf)
-    if (cb) cb();
-  })
-  this.writable = true
-}
-inherits(ValidationStream, stream.Stream)
-ValidationStream.prototype.write = function (chunk) {
-  this.emit('data', chunk)
-}
-ValidationStream.prototype.end = function (chunk) {
-  if (chunk) emit('data', chunk)
-  this.emit('end')
-}
 
 describe('request', function() {
   var amino = require('../');
