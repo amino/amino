@@ -2,7 +2,7 @@
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "amino",
   "description": "Clustered application creation toolkit",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "repository": {
     "type": "git",
     "url": "http://github.com/cantina/amino.git"
@@ -10,7 +10,7 @@
   "main": "lib/amino.js",
   "dependencies": {
     "inherits": "~1.0.0",
-    "nconf": "~0.5.1",
+    "nconf": "~0.6.4",
     "semver": "~1.0.13",
     "hash_ring": "~0.2.1",
     "idgen": "~1.0.2"
