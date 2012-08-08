@@ -1,6 +1,7 @@
 {
   "amino": {
     "pubsub": {
+      "enable": true,
       "driver": "redis",
       "options": {
         "host": "localhost",
@@ -8,12 +9,14 @@
       }
     },
     "queue": {
+      "enable": true,
       "driver": "amqp",
       "options": {
         "url": "amqp://localhost"
       }
     },
     "request": {
+      "enable": true,
       "driver": "http"
     }
   }

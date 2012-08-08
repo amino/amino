@@ -1,18 +1,21 @@
 {
   "amino": {
     "pubsub": {
+      "enable": true,
       "driver": "redis",
       "options": {
         "nodes": ["localhost:6379"]
       }
     },
     "queue": {
+      "enable": false,
       "driver": "amqp",
       "options": {
         "url": "amqp://localhost"
       }
     },
     "request": {
+      "enable": true,
       "driver": "http"
     },
     "range": [50000, 60000]
