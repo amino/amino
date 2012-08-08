@@ -159,10 +159,7 @@ describe('service', function() {
           req.on('error', function(err) {
             assert.strictEqual(err.code, 'ECONNREFUSED', 'server is down');
             errCount++;
-            // wait a little bit for the failover
-            setTimeout(function() {
-              cb(null, 1);
-            }, 10);
+            cb(null, 1);
           });
           req.on('connect', function() {
             cb(null, 1);
