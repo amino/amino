@@ -1,12 +1,21 @@
-var amino = require('../')
-  , net = require('net')
+var net = require('net')
   , assert = require('assert')
   , async = require('async')
   , create_request = require('./helpers/createRequest')
   ;
 
 describe('service', function() {
-  var services;
+  var amino = require('../'), services;
+
+  amino.on('error', function(err) {
+    throw err;
+  });
+  afterEach(function() {
+    if (amino) {
+      amino.reset();
+    }
+  });
+
   before(function(done) {
     var tasks = [];
     // Set up 3 services to test load balancing/failover
@@ -298,7 +307,17 @@ describe('service', function() {
 });
 
 describe('manual service', function() {
-  var service;
+  var amino = require('../'), service;
+
+  amino.on('error', function(err) {
+    throw err;
+  });
+  afterEach(function() {
+    if (amino) {
+      amino.reset();
+    }
+  });
+
   before(function(done) {
     var spec = new amino.Spec({service: 'foo', port: 99999, host: 'localhost'});
     service = amino.createService(spec);
