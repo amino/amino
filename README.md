@@ -45,18 +45,21 @@ like this (default conf located in `etc/amino.json`)
 {
   "amino": {
     "pubsub": {
+      "enable": true,
       "driver": "redis",
       "options": {
         "nodes": ["localhost:6379"]
       }
     },
     "queue": {
+      "enable": false,
       "driver": "amqp",
       "options": {
         "url": "amqp://localhost"
       }
     },
     "request": {
+      "enable": true,
       "driver": "http"
     },
     "range": [50000, 60000]
@@ -103,6 +106,9 @@ amino.subscribe('myname', function(name) {
 ```
 
 ### queue/process
+
+__Note: you must set `"queue": { "enable": true }` in `amino.json` to use the
+queue interface.__ 
 
 **order-sprocket.js**
 
