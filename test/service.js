@@ -151,32 +151,27 @@ describe('service', function() {
     // Failover should happen after the first failed request. Subsequent requests
     // should use the updated spec list.
     it('should failover', function(done) {
-      var tasks = [], hadError = false;
-      tasks.push(function(cb) {
-        var req = create_request('test');
-        req.on('error', function(err) {
-          assert.strictEqual(err.code, 'ECONNREFUSED', 'server is down');
-          hadError = true;
-          cb();
-        });
-      });
+      var tasks = [], errCount = 0;
 
       for (var i = 0; i < 6; i++) {
         tasks.push(function(cb) {
-          (function(req) {
-            req.on('error', function(err) {
-              assert.ifError(err);
-            });
-            req.on('connect', function() {
+          var req = create_request('test');
+          req.on('error', function(err) {
+            assert.strictEqual(err.code, 'ECONNREFUSED', 'server is down');
+            errCount++;
+            // wait a little bit for the failover
+            setTimeout(function() {
               cb(null, 1);
-            });
-          })(create_request('test'));
+            }, 10);
+          });
+          req.on('connect', function() {
+            cb(null, 1);
+          });
         });
       }
 
       async.series(tasks, function(err, results) {
-        assert(hadError, 'one error happened');
-        results.shift();
+        assert.strictEqual(errCount, 1, 'one error happened');
         assert.strictEqual(results.length, 6, '6 responses came back');
         done();
       });
