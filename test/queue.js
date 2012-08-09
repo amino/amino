@@ -8,10 +8,8 @@ describe('queue', function() {
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
-      amino.reset();
-    }
+  after(function() {
+    amino.reset();
   });
 
   it('should only receive from the subscribed queue', function(done) {

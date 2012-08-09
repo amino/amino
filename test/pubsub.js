@@ -8,10 +8,8 @@ describe('pub/sub', function() {
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
-      amino.reset();
-    }
+  after(function() {
+    amino.reset();
   });
 
   it('should only receive from the subscribed event', function(done) {
@@ -36,6 +34,19 @@ describe('pub/sub', function() {
         assert.fail(letter, letters, 'Letter not in list', 'in');
       }
     });
+  });
+
+  it('can unsubscribe', function(done) {
+    amino.on('unsubscribe', function(channel, count) {
+      if (channel === 'alphabet') {
+        amino.on('alphabet', function(letter) {
+          assert(false, 'unsubscribe failed');
+        });
+        amino.publish('alphabet', 'Z');
+        setTimeout(done, 200);
+      }
+    });
+    amino.unsubscribe('alphabet');
   });
 
   it('can handle objects', function(done) {

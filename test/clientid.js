@@ -11,10 +11,11 @@ describe('clientId', function() {
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
-      amino.reset();
-    }
+  after(function() {
+    services.forEach(function(service) {
+      if (service) service.close();
+    });
+    amino.reset();
   });
 
   before(function(done) {
@@ -76,7 +77,7 @@ describe('clientId', function() {
       services[0].on('close', function() {
         done();
       });
-      service.close();
+      service[0].close();
     });
   });
   describe('versioning', function() {
@@ -92,6 +93,7 @@ describe('clientId', function() {
           done();
         });
       });
+      services.push(service);
     });
     it('should respect req @1.1.0', function(done) {
       var tasks = [], clientId = idgen(), specId;

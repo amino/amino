@@ -3,19 +3,20 @@ var assert = require('assert')
   ;
 
 describe('request', function() {
-  var amino = require('../');
+  var amino = require('../'), services = [];
 
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
-      amino.reset();
-    }
+  after(function() {
+    services.forEach(function(service) {
+      if (service) service.close();
+    });
+    amino.reset();
   });
 
   before(function(done) {
-    amino.respond('math.edu@1.0.0', function(router) {
+    services.push(amino.respond('math.edu@1.0.0', function(router) {
       router.get('/square/:input', function(input) {
         var data = Math.pow(input, 2);
         this.res.json(data);
@@ -31,12 +32,12 @@ describe('request', function() {
       });
 
       done();
-    });
+    }));
   });
 
   var posts = [], mySpec;
   before(function(done) {
-    amino.respond('cloudpost', function(router, spec) {
+    services.push(amino.respond('cloudpost', function(router, spec) {
       mySpec = spec;
       var currentId = 1;
       function getPost(id) {
@@ -117,7 +118,7 @@ describe('request', function() {
       });
 
       done();
-    });
+    }));
   });
 
   it('returns correct answer', function(done) {

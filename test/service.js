@@ -10,13 +10,14 @@ describe('service', function() {
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
-      amino.reset();
-    }
+  after(function() {
+    services.forEach(function(service) {
+      if (service) service.close();
+    });
+    amino.reset();
   });
 
-  before(function(done) {
+  it('sets up 3 services', function(done) {
     var tasks = [];
     // Set up 3 services to test load balancing/failover
     for (var i = 0; i < 3; i++) {
@@ -55,20 +56,17 @@ describe('service', function() {
     var tasks = [];
     for (var i = 0; i < 6; i++) {
       tasks.push(function(cb) {
-        (function(req) {
-          req.on('error', function(err) {
-            cb(err);
-          });
-          req.on('connect', function() {
-            req.write('hello');
-          });
-          req.on('data', function(data) {
-            var index = expected.indexOf(data);
-            assert.notStrictEqual(index, -1, 'response expected');
-            expected.splice(index, 1);
-            cb();
-          });
-        })(create_request('test'));
+        var req = create_request('test');
+        req.on('error', cb);
+        req.on('connect', function() {
+          req.write('hello');
+        });
+        req.on('data', function(data) {
+          var index = expected.indexOf(data);
+          assert.notStrictEqual(index, -1, 'response expected');
+          expected.splice(index, 1);
+          cb();
+        });
       });
     }
     async.parallel(tasks, function(err, results) {
@@ -79,7 +77,7 @@ describe('service', function() {
   });
 
   describe('should close', function() {
-    before(function(done) {
+    it('closes first two servers', function(done) {
       // Close the first two servers
       var tasks = [];
       for (var i = 0; i < 2; i++) {
@@ -123,7 +121,7 @@ describe('service', function() {
     });
   });
   describe('failover', function() {
-    before(function(done) {
+    it('sets up failover', function(done) {
       var tasks = [];
       tasks.push(function(cb) {
         var service = amino.createService('test@1.1.0');
@@ -175,7 +173,7 @@ describe('service', function() {
     });
   });
   describe('versioning', function() {
-    before(function(done) {
+    it('starts up version 1.2.0', function(done) {
       var service = amino.createService('test@1.2.0');
       service.once('spec', function(spec) {
         service.server = net.createServer(function(socket) {
@@ -188,7 +186,7 @@ describe('service', function() {
         });
       });
     });
-    before(function(done) {
+    it('starts up version 2.0.0', function(done) {
       // Also test versioning with HTTP
       amino.respond('test@2.0.0', function(router) {
         router.get('/', function() {
@@ -304,13 +302,14 @@ describe('manual service', function() {
   amino.on('error', function(err) {
     throw err;
   });
-  afterEach(function() {
-    if (amino) {
+  after(function(done) {
+    service.close(function() {
       amino.reset();
-    }
+      done();
+    });
   });
 
-  before(function(done) {
+  it('sets up manual service', function(done) {
     var spec = new amino.Spec({service: 'foo', port: 99999, host: 'localhost'});
     service = amino.createService(spec);
     service.server = net.createServer(function(socket) {
@@ -321,10 +320,6 @@ describe('manual service', function() {
     service.server.listen(spec.port, function() {
       done();
     });
-  });
-
-  after(function(done) {
-    service.close(done);
   });
 
   it('can serve requests from manually created service', function(done) {
