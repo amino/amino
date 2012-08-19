@@ -3,6 +3,8 @@ Amino
 
 Clustered application creation toolkit
 
+[![build status](https://secure.travis-ci.org/cantina/amino.png)](http://travis-ci.org/cantina/amino)
+
 Idea
 ----
 
