@@ -1,3 +1,3 @@
 [submodule "examples"]
 	path = examples
-	url = git@github.com:cantina/amino-examples.git
+	url = git://github.com/cantina/amino-examples.git
