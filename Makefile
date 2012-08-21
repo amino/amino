@@ -1,6 +1,5 @@
 test:
 	@./node_modules/.bin/mocha \
-		--reporter spec \
-		test/*
+		--reporter spec
 
 .PHONY: test
