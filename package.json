@@ -9,10 +9,7 @@
   },
   "main": "lib/amino.js",
   "dependencies": {
-    "idgen": "~1.1.1",
-    "amino-redis": "~0.0.0",
-    "amino-service": "~0.0.0",
-    "amino-request": "~0.0.0"
+    "idgen": "~1.1.1"
   },
   "devDependencies": {
     "mocha": "*",
