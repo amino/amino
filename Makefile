@@ -1,8 +1,6 @@
-
-REPORTER = spec
-
 test:
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER)
+	@./node_modules/.bin/mocha \
+		--reporter spec \
+		test/*
 
 .PHONY: test
