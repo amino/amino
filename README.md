@@ -12,11 +12,10 @@ Amino is a toolkit for building scalable, fault-taulerant apps in Node.js.
 
 Features:
 
-  - fast pub/sub
-  - decentralized service registry
-  - load-balancing
-  - graceful failover
-  - no single point of failure
+  - Fast pub/sub
+  - Decentralized service registry
+  - Load-balancing
+  - No single point of failure
 
 Example
 -------
