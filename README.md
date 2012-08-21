@@ -39,6 +39,7 @@ amino.publish('cool stuff', {cool: true});
 var server = require('http').createServer(function (req, res) {
   res.end('cool stuff');
 });
+// server's listen() method will be called by amino.
 var service = amino.createService('cool-stuff@0.1.0', server);
 
 amino.request('amino://cool-stuff/', function (err, res, body) {
