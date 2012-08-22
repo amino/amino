@@ -14,6 +14,15 @@
     "amino-service": "~0.0.0",
     "amino-request": "~0.0.0"
   },
+  "keywords": [
+    "cluster",
+    "service",
+    "pub/sub",
+    "high-availability",
+    "cloud",
+    "redundant",
+    "ipc"
+  ],
   "devDependencies": {
     "mocha": "*"
   },
