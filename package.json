@@ -15,8 +15,7 @@
     "amino-request": "~0.0.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "async": "*"
+    "mocha": "*"
   },
   "engines": {
     "node": ">= 0.6.0"
