@@ -5,7 +5,7 @@ describe('basic test', function () {
   it('can attach and init plugins', function () {
     amino
       .use(require('./fixtures/plugin'), {bar: 'boo'})
-      .init({test: 5});
+      .init({redis: false, service: false, request: false, test: 5});
 
     amino.foo();
     assert.equal(amino.baz(), 'boo');
