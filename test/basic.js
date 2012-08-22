@@ -10,5 +10,6 @@ describe('basic test', function () {
     amino.foo();
     assert.equal(amino.baz(), 'boo');
     assert.equal(amino.options.test, 5);
+    assert(amino.id);
   });
 });
