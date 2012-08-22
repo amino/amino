@@ -11,6 +11,7 @@ describe('basic test', function () {
     assert.equal(amino.baz(), 'boo');
     assert.equal(amino.options.test, 5);
     assert.equal(typeof amino.id, 'string');
-    assert.equal(typeof amino.idgen, 'function');
+    assert.equal(typeof amino.utils.idgen, 'function');
+    assert.equal(typeof amino.utils.copy, 'function');
   });
 });
