@@ -7,7 +7,6 @@
     "type": "git",
     "url": "http://github.com/cantina/amino.git"
   },
-  "main": "lib/amino.js",
   "dependencies": {
     "idgen": "~1.1.1",
     "amino-redis": "~0.0.0",

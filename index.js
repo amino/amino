@@ -20,7 +20,7 @@ Amino.prototype.init = function (options) {
   });
 
   // Core utils.
-  this.use(require('../plugins/utils'));
+  this.use(require('./plugins/utils'));
   this.id = this.utils.idgen();
 
   // Require external core plugins unless opt-out with "false".
