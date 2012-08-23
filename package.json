@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "idgen": "~1.1.1",
-    "amino-redis": "~0.0.0",
-    "amino-service": "~0.0.0",
-    "amino-request": "~0.0.0"
+    "amino-redis": "~0.0.2",
+    "amino-service": "~0.0.2",
+    "amino-request": "~0.0.2"
   },
   "keywords": [
     "cluster",
