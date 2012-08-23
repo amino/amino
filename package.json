@@ -11,7 +11,7 @@
     "idgen": "~1.1.1",
     "amino-redis": "~0.0.2",
     "amino-service": "~0.0.2",
-    "amino-request": "~0.0.2"
+    "amino-request": "~0.1.0"
   },
   "keywords": [
     "cluster",
