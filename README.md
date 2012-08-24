@@ -65,7 +65,7 @@ To disable a plugin, just pass `false`.
 
 ### Redis options
 
-- To specify a single redis server, just pass a host, port, or host:port to
+- To specify a single redis server, just pass a `host`, `port`, or `host:port` to
   `init`, for example:
 
   ```javascript
@@ -93,9 +93,7 @@ To disable a plugin, just pass `false`.
 
 ### Service options
 
-- `host`: 
-
-  By default, Amino will auto-detect your server's network IP by using a DNS
+- `host`: By default, Amino will auto-detect your server's network IP by using a DNS
   lookup on the server's `hostname`. If you already know the correct IP
   (or hostname) to use, you can specify it with this option.
 
@@ -110,7 +108,7 @@ To disable a plugin, just pass `false`.
 - `readyTimeout`: time (in ms) before a service is deemed "ready" after getting
   the first spec. (Default: `200`)
 
-- (options will also be passed to `http.Agent` constructor)
+- (other options will also be passed to `http.Agent` constructor)
 
 Pattern #1: publish/subscribe
 -----------------------------
