@@ -204,7 +204,7 @@ services, or to manually get a server spec for a given service.
 #### Example
 
 ```javascript
-amino.requestService(service-name[@version], function (spec) {
+amino.requestService('cool-stuff@0.1.x', function (spec) {
   // now we can connect to spec.host/spec.port
 });
 ```
