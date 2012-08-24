@@ -12,15 +12,15 @@ Amino is a toolkit for building clusterable, fault-taulerant apps in Node.js.
 
 Features:
 
-  - Two robust communications patterns bundled: **publish/subscribe** and
-    **service/request**
-  - Decentralized service registry
-  - Supports [semver](http://semver.org) specifications
-  - Automated host/port assignments and gossiping
-  - Built-in load-balancing, sticky sessions, consistent hashing, and failover
-  - Enables your app to have no single point of failure
-  - Much, much faster and cooler than [hook.io](https://github.com/hookio/) ;)
-  - Simple, extensible architecture
+- Two robust communications patterns bundled: **publish/subscribe** and
+  **service/request**
+- Decentralized service registry
+- Supports [semver](http://semver.org) specifications
+- Automated host/port assignments and gossiping
+- Built-in load-balancing, sticky sessions, consistent hashing, and failover
+- Enables your app to have no single point of failure
+- Much, much faster and cooler than [hook.io](https://github.com/hookio/) ;)
+- Simple, extensible architecture
 
 Installation
 ------------
@@ -111,19 +111,20 @@ Registers an Amino service.
 - `server`: A server instance returned by `net.createServer()` or
   `http.createServer()`.
 
-- Returns: a `Service` instance.
-    - (event) `listening`: called when the service has published itself and is
-      available for requests.
-    - (property) `spec`: an object containing info about the service (gossiped
-      around the cluster)
-        - `service`: the service name
-        - `version`: the service version, if specified
-        - `host`: the hostname the server is reachable from
-        - `port`: the server's listening port
-        - `id`: a unique string identifying the server
-    - (method) `close(onClose)`: close the service and the associated server. Called
-      automatically when the server closes.
-    - (event) `close`: called when the service closes.
+Returns: a `Service` instance.
+
+- (event) `listening`: called when the service has published itself and is
+  available for requests.
+- (property) `spec`: an object containing info about the service (gossiped
+  around the cluster)
+    - `service`: the service name
+    - `version`: the service version, if specified
+    - `host`: the hostname the server is reachable from
+    - `port`: the server's listening port
+    - `id`: a unique string identifying the server
+- (method) `close(onClose)`: close the service and the associated server. Called
+  automatically when the server closes.
+- (event) `close`: called when the service closes.
 
 #### Example
 
@@ -162,7 +163,7 @@ Makes round-robin requests to Amino `http` services.
 - `onResponse`: callback to be called with the arguments `err, res, body` when
   a response is received.
 
-- Returns: an `http.ClientRequest` object.
+Returns: an `http.ClientRequest` object.
 
 #### Example
 
@@ -198,9 +199,10 @@ services, or to manually get a server spec for a given service.
     - `port`: the server's listening port
     - `id`: a unique string identifying the server
 
-- Returns: a `ServiceRequest` instance:
-  - (event) `spec`: called with the `spec` object.
-  - (property) `headers`: an array of headers for the request (used internally)
+Returns: a `ServiceRequest` instance:
+
+- (event) `spec`: called with the `spec` object.
+- (property) `headers`: an array of headers for the request (used internally)
 
 #### Example
 
