@@ -110,6 +110,7 @@ Registers an Amino service.
   ```
 - `server`: A server instance returned by `net.createServer()` or
   `http.createServer()`.
+
 - Returns: a `Service` instance.
     - (event) `listening`: called when the service has published itself and is
       available for requests.
@@ -158,7 +159,6 @@ Makes round-robin requests to Amino `http` services.
 - `options`: options object to pass to the request, containing keys such as
   `headers` and `body` (for posts, etc.). See
   [mikeal/request](https://github.com/mikeal/request) for more options.
-
 - `onResponse`: callback to be called with the arguments `err, res, body` when
   a response is received.
 
@@ -197,6 +197,7 @@ services, or to manually get a server spec for a given service.
     - `host`: the hostname the server is reachable from
     - `port`: the server's listening port
     - `id`: a unique string identifying the server
+
 - Returns: a `ServiceRequest` instance:
   - (event) `spec`: called with the `spec` object.
   - (property) `headers`: an array of headers for the request (used internally)
