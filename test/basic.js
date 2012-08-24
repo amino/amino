@@ -28,16 +28,4 @@ describe('basic test', function () {
     assert.equal(typeof amino.requestService, 'undefined');
     assert.equal(typeof amino.request, 'undefined');
   });
-
-  it('can attach core plugins', function () {
-    amino.init();
-
-    assert.equal(typeof amino.Spec, 'function');
-    assert.equal(typeof amino.publish, 'function');
-    assert.equal(typeof amino.subscribe, 'function');
-    assert.equal(typeof amino.unsubscribe, 'function');
-    assert.equal(typeof amino.createService, 'function');
-    assert.equal(typeof amino.requestService, 'function');
-    assert.equal(typeof amino.request, 'function');
-  });
 });
