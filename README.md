@@ -22,7 +22,7 @@ Features:
   - Can create services from any Node `http`, `https`, or `net` server object
   - Built-in load-balancing, sticky sessions, consistent hashing, and failover
   - Enables your app to have no single point of failure
-  - Much, much faster and cooler than [https://github.com/hookio/hook.io](hook.io) ;)
+  - Much, much faster and cooler than [hook.io](https://github.com/hookio/) ;)
   - Simple, extensible architecture
 
 Install
