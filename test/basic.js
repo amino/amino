@@ -2,10 +2,16 @@ var amino = require('../')
   , assert = require('assert')
 
 describe('basic test', function () {
-  it('can attach and init plugins', function () {
+  it('can attach an abstract plugin', function () {
     amino
       .use(require('./fixtures/plugin'), {bar: 'boo'})
-      .init({redis: false, service: false, request: false, test: 5});
+      .init({
+        spec: false,
+        redis: false,
+        service: false,
+        request: false,
+        test: 5
+      });
 
     amino.foo();
     assert.equal(amino.baz(), 'boo');
@@ -13,5 +19,25 @@ describe('basic test', function () {
     assert.equal(typeof amino.id, 'string');
     assert.equal(typeof amino.utils.idgen, 'function');
     assert.equal(typeof amino.utils.copy, 'function');
+
+    assert.equal(typeof amino.Spec, 'undefined');
+    assert.equal(typeof amino.publish, 'undefined');
+    assert.equal(typeof amino.subscribe, 'undefined');
+    assert.equal(typeof amino.unsubscribe, 'undefined');
+    assert.equal(typeof amino.createService, 'undefined');
+    assert.equal(typeof amino.requestService, 'undefined');
+    assert.equal(typeof amino.request, 'undefined');
+  });
+
+  it('can attach core plugins', function () {
+    amino.init();
+
+    assert.equal(typeof amino.Spec, 'function');
+    assert.equal(typeof amino.publish, 'function');
+    assert.equal(typeof amino.subscribe, 'function');
+    assert.equal(typeof amino.unsubscribe, 'function');
+    assert.equal(typeof amino.createService, 'function');
+    assert.equal(typeof amino.requestService, 'function');
+    assert.equal(typeof amino.request, 'function');
   });
 });

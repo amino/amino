@@ -24,7 +24,7 @@ Amino.prototype.init = function (options) {
   this.id = this.utils.idgen();
 
   // Require external core plugins unless opt-out with "false".
-  ['redis', 'service', 'request'].forEach(function (plugin) {
+  ['spec', 'redis', 'service', 'request'].forEach(function (plugin) {
     if (self.options[plugin] !== false) {
       self.use(require('amino-' + plugin), self.options[plugin]);
     }
