@@ -8,18 +8,15 @@ Clustering framework
 Idea
 ----
 
-Amino is a toolkit for building scalable, fault-taulerant apps in Node.js.
+Amino is a toolkit for building clusterable, fault-taulerant apps in Node.js.
 
 Features:
 
-  - Two robust communications patterns bundled: publish/subscribe and
-    service/request
+  - Two robust communications patterns bundled: **publish/subscribe** and
+    **service/request**
   - Decentralized service registry
-  - Services can be powered by N number of processes, and identified using
-    [Semver](http://semver.org) ranges
-  - Automated host/port assignments and gossiping, allowing maximum flexibility
-    and minimal configuration
-  - Can create services from any Node `http`, `https`, or `net` server object
+  - Supports [semver](http://semver.org) specifications
+  - Automated host/port assignments and gossiping
   - Built-in load-balancing, sticky sessions, consistent hashing, and failover
   - Enables your app to have no single point of failure
   - Much, much faster and cooler than [hook.io](https://github.com/hookio/) ;)
@@ -262,6 +259,18 @@ var req = amino.request('cool-stuff@0.1.x', '/', function (err, res, body) {
   // body == 'cool stuff'
 });
 ```
+
+#### "Sticky" sessions
+
+Amino has support for [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing)
+which can be used to route multiple requests to the same server.
+
+To enable this feature, pass a special header called `X-Amino-StickyId`
+to requests, containing an IP address, cookie value, or other identifier to
+consistently route requests with.
+
+Note that as servers are added or removed from the service, sticky routing
+can be subject to change.
 
 ### Method: amino.requestService(service-name[@version], onSpec)
 
