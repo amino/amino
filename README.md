@@ -62,7 +62,7 @@ amino.publish('cool stuff', {cool: true});
 
 Subscribes to an event.
 
-- `ev`: Event name as passed to `publish()`
+- `ev`: Event name as passed to `amino.publish()`
 
 - `handler`: An event handler, which will be passed any arguments that were
   part of the `publish()` call.
@@ -79,9 +79,10 @@ amino.subscribe('cool stuff', function (stuff) {
 
 Unsubscribes from an event.
 
-- `ev`: Event name as passed to `publish()`
+- `ev`: Event name as passed to `amino.subscribe()`
 
-- `handler`: The event handler. If not specified, unsubscribes all handlers.
+- `handler`: The event handler used with `amino.subscribe()`. If not specified,
+  unsubscribes all handlers of the event.
 
 #### Example
 
