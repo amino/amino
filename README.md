@@ -98,6 +98,7 @@ Registers an Amino service.
   with an optional [semver](http://semver.org) specification.
 - `spec`: Alternatively, you may specify the full spec of your service, if
   you already have a port (you will then have to call `listen()` yourself):
+
   ```javascript
   var spec = {
     service: "service-name@0.1.0",
@@ -233,6 +234,7 @@ To disable a plugin, just pass `false`.
 
 - To specify a single redis server, just pass a `host`, `port`, or `host:port` to
   `init`, for example:
+
   ```javascript
   var amino = require('amino')
     .init({
@@ -243,6 +245,7 @@ To disable a plugin, just pass `false`.
   of servers. See [haredis](https://github.com/carlos8f/haredis) for more
   information.
 - To pass options to the redis client:
+
   ```javascript
   var amino = require('amino')
     .init({
