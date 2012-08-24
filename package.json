@@ -1,12 +1,13 @@
 {
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "amino",
-  "description": "Clustered application creation toolkit",
-  "version": "1.0.0-alpha",
+  "description": "Clustering framework for Node.js",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "http://github.com/cantina/amino.git"
   },
+  "license": "MIT",
   "dependencies": {
     "idgen": "~1.1.1",
     "amino-redis": "~0.0.2",
