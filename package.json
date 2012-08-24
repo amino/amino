@@ -2,7 +2,7 @@
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "amino",
   "description": "Clustering framework for Node.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "http://github.com/amino/amino.git"
@@ -10,17 +10,22 @@
   "license": "MIT",
   "dependencies": {
     "idgen": "~1.1.1",
-    "amino-redis": "~0.0.2",
-    "amino-service": "~0.0.2",
-    "amino-request": "~0.1.0"
+    "amino-redis": "~0.0.4",
+    "amino-service": "~0.0.4",
+    "amino-request": "~0.1.2"
   },
+  "homepage": "https://github.com/amino/amino",
   "keywords": [
+    "load-balancing",
+    "failover",
     "cluster",
+    "scalability",
+    "performance",
     "service",
     "pub/sub",
     "high-availability",
     "cloud",
-    "redundant",
+    "redundancy",
     "ipc"
   ],
   "devDependencies": {
