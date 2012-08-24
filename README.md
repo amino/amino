@@ -31,84 +31,12 @@ In the root of your project,
 $ npm install --save amino
 ```
 
-Configuration
--------------
-
-Amino is bundled with three plugins by default:
-[amino-redis](https://github.com/amino/amino-redis),
-[amino-service](https://github.com/amino/amino-service), and
-[amino-request](https://github.com/amino/amino-request).
-
-### Default configuration
-
 To use the default configuration (requires [redis](http://redis.io) listening
 at `localhost:6379`), simply call:
 
 ```javascript
 var amino = require('amino').init();
 ```
-
-### Configuring core plugins
-
-Core plugins can be configured by passing options to `init()`.
-
-```javascript
-var amino = require('amino')
-  .init({
-    redis: redis options...
-    service: service options...
-    request: request options...
-  });
-```
-
-To disable a plugin, just pass `false`.
-
-### Redis options
-
-- To specify a single redis server, just pass a `host`, `port`, or `host:port` to
-  `init`, for example:
-
-  ```javascript
-  var amino = require('amino')
-    .init({
-      redis: "1.2.3.4:5679"
-    });
-  ```
-
-- To use multiple redis servers for failover/load-balancing, just pass an array
-  of servers. See [haredis](https://github.com/carlos8f/haredis) for more
-  information.
-
-- To pass options to the redis client:
-
-  ```javascript
-  var amino = require('amino')
-    .init({
-      redis: {
-        nodes: "1.2.3.4:5679",
-        node_redis/haredis options here...
-      }
-    });
-  ```
-
-### Service options
-
-- `host`: By default, Amino will auto-detect your server's network IP by using a DNS
-  lookup on the server's `hostname`. If you already know the correct IP
-  (or hostname) to use, you can specify it with this option.
-
-### Request options
-
-- `specRequestThrottle`: interval (in ms) to throttle publishes when requesting
-  specs for a service. (Default: `5000`)
-
-- `specRequestInterval`: interval (in ms) to request "straggler" specs for all
-  services. (Default: `120000`)
-
-- `readyTimeout`: time (in ms) before a service is deemed "ready" after getting
-  the first spec. (Default: `200`)
-
-- (other options will also be passed to `http.Agent` constructor)
 
 Pattern #1: publish/subscribe
 -----------------------------
@@ -297,6 +225,74 @@ services, or to manually get a server spec for a given service.
 amino.requestService(service-name[@version], function (spec) {
   // now we can connect to spec.host/spec.port
 });
+
+Configuration
+-------------
+
+Amino is bundled with three plugins by default:
+[amino-redis](https://github.com/amino/amino-redis),
+[amino-service](https://github.com/amino/amino-service), and
+[amino-request](https://github.com/amino/amino-request).
+
+Core plugins can be configured by passing options to `init()`.
+
+```javascript
+var amino = require('amino')
+  .init({
+    redis: redis options...
+    service: service options...
+    request: request options...
+  });
+```
+
+To disable a plugin, just pass `false`.
+
+### Redis options
+
+- To specify a single redis server, just pass a `host`, `port`, or `host:port` to
+  `init`, for example:
+
+  ```javascript
+  var amino = require('amino')
+    .init({
+      redis: "1.2.3.4:5679"
+    });
+  ```
+
+- To use multiple redis servers for failover/load-balancing, just pass an array
+  of servers. See [haredis](https://github.com/carlos8f/haredis) for more
+  information.
+
+- To pass options to the redis client:
+
+  ```javascript
+  var amino = require('amino')
+    .init({
+      redis: {
+        nodes: "1.2.3.4:5679",
+        node_redis/haredis options here...
+      }
+    });
+  ```
+
+### Service options
+
+- `host`: By default, Amino will auto-detect your server's network IP by using a DNS
+  lookup on the server's `hostname`. If you already know the correct IP
+  (or hostname) to use, you can specify it with this option.
+
+### Request options
+
+- `specRequestThrottle`: interval (in ms) to throttle publishes when requesting
+  specs for a service. (Default: `5000`)
+
+- `specRequestInterval`: interval (in ms) to request "straggler" specs for all
+  services. (Default: `120000`)
+
+- `readyTimeout`: time (in ms) before a service is deemed "ready" after getting
+  the first spec. (Default: `200`)
+
+- (other options will also be passed to `http.Agent` constructor)
 
 Extending Amino
 ---------------
