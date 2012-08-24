@@ -22,8 +22,8 @@ Features:
   - Much, much faster and cooler than [hook.io](https://github.com/hookio/) ;)
   - Simple, extensible architecture
 
-Install
--------
+Installation
+------------
 
 In the root of your project,
 
@@ -34,11 +34,10 @@ $ npm install --save amino
 Configuration
 -------------
 
-Amino is bundled with 4 plugins by default:
+Amino is bundled with three plugins by default:
 [amino-redis](https://github.com/amino/amino-redis),
-[amino-service](https://github.com/amino/amino-service),
-[amino-request](https://github.com/amino/amino-request),
-and a `utils` plugin.
+[amino-service](https://github.com/amino/amino-service), and
+[amino-request](https://github.com/amino/amino-request).
 
 ### Default configuration
 
