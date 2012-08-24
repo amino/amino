@@ -104,12 +104,13 @@ Registers an Amino service.
   you already have a port (you will then have to call `listen()` yourself):
 
   ```javascript
-  var service = amino.createService({
+  var spec = {
     service: "service-name@0.1.0",
     host: "server-a",
     port: 5678
-  }, server);
-  server.listen(5678);
+  };
+  var service = amino.createService(spec, server);
+  server.listen(spec.port);
   ```
 
 - `server`: A server instance returned by `net.createServer()` or
