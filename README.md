@@ -3,7 +3,7 @@ Amino
 
 Clustering framework for Node.js
 
-[![build status](https://secure.travis-ci.org/cantina/amino.png)](http://travis-ci.org/cantina/amino)
+[![build status](https://secure.travis-ci.org/amino/amino.png)](http://travis-ci.org/amino/amino)
 
 Idea
 ----
