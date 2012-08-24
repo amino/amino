@@ -43,10 +43,10 @@ Pattern #1: publish/subscribe
 
 ### Method: `amino.publish(ev [, arg, arg...])`
 
-Publishes an event, with optional arguments.
+Publishes an event across the cluster, with an optional payload.
 
 - `ev`: Event name, can be any string.
-- `arg`: Any number of javascript objects. Note that since data must be
+- `arg`: Argument(s) to pass to subscriber handlers. Note that since data must be
   serialized, custom javascript class instances will not survive intact. Native
   objects will attempt to be unserialized via
   [hydration](https://github.com/carlos8f/hydration).
