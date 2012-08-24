@@ -141,7 +141,7 @@ emphemeral port and broadcast the availability of your service.
 var service = amino.createService('cool-stuff@0.1.0', server);
 ```
 
-### Method: `amino.request(service-name[@version], patchSpec [, options, onResponse])`
+### Method: `amino.request(service-name[@version], pathSpec [, options, onResponse])`
 
 Makes round-robin requests to Amino `http` services.
 
