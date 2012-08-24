@@ -146,9 +146,9 @@ var service = amino.createService('cool-stuff@0.1.0', server);
 Makes round-robin requests to Amino `http` services.
 
 - Alternate syntax:
-    - (simple GET): amino.request('amino://service-name/' [, onResponse])
-    - (generic HTTP): amino.request('http://some-site/' [, onResponse])
-    - amino.request(options, [, onResponse])
+    - (simple GET): `amino.request('amino://service-name/' [, onResponse])`
+    - (generic HTTP): `amino.request('http://some-site/' [, onResponse])`
+    - (url in options): `amino.request(options, [, onResponse])`
 - `service-name`: the name of the service to request, with an optional
   [semver](http://semver.org) specification. Can be specified as the first
   parameter to `amino.request()`, or as the hostname in an amino url such as
