@@ -87,9 +87,7 @@ Unsubscribes from an event.
 #### Example
 
 ```javascript
-amino.subscribe('cool stuff', function (stuff) {
-  // stuff.cool == true
-});
+amino.unsubscribe('cool stuff', coolStuffHandler);
 ```
 
 Pattern #2: service/request
