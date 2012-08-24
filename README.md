@@ -41,7 +41,7 @@ var amino = require('amino').init();
 Pattern #1: publish/subscribe
 -----------------------------
 
-### Method: amino.publish(ev, [arg, arg...])
+### Method: amino.publish(ev [, arg, arg...])
 
 Publishes an event, with optional arguments.
 
@@ -73,6 +73,7 @@ Subscribes to an event.
 amino.subscribe('cool stuff', function (stuff) {
   // stuff.cool == true
 });
+```
 
 ### Method: amino.unsubscribe(ev [, handler])
 
@@ -88,6 +89,7 @@ Unsubscribes from an event.
 amino.subscribe('cool stuff', function (stuff) {
   // stuff.cool == true
 });
+```
 
 Pattern #2: service/request
 ---------------------------
@@ -225,6 +227,7 @@ services, or to manually get a server spec for a given service.
 amino.requestService(service-name[@version], function (spec) {
   // now we can connect to spec.host/spec.port
 });
+```
 
 Configuration
 -------------
