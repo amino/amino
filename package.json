@@ -2,10 +2,10 @@
   "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
   "name": "amino",
   "description": "Clustering framework for Node.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
-    "url": "http://github.com/cantina/amino.git"
+    "url": "http://github.com/amino/amino.git"
   },
   "license": "MIT",
   "dependencies": {
