@@ -46,7 +46,6 @@ Pattern #1: publish/subscribe
 Publishes an event, with optional arguments.
 
 - `ev`: Event name, can be any string.
-
 - `arg`: Any number of javascript objects. Note that since data must be
   serialized, custom javascript class instances will not survive intact. Native
   objects will attempt to be unserialized via
@@ -63,7 +62,6 @@ amino.publish('cool stuff', {cool: true});
 Subscribes to an event.
 
 - `ev`: Event name as passed to `amino.publish()`
-
 - `handler`: An event handler, which will be passed any arguments that were
   part of the `publish()` call.
 
@@ -80,7 +78,6 @@ amino.subscribe('cool stuff', function (stuff) {
 Unsubscribes from an event.
 
 - `ev`: Event name as passed to `amino.subscribe()`
-
 - `handler`: The event handler used with `amino.subscribe()`. If not specified,
   unsubscribes all handlers of the event.
 
@@ -99,10 +96,8 @@ Registers an Amino service.
 
 - `service-name`: The name of your service (should be alpha-numeric/dashes)
   with an optional [semver](http://semver.org) specification.
-
 - `spec`: Alternatively, you may specify the full spec of your service, if
   you already have a port (you will then have to call `listen()` yourself):
-
   ```javascript
   var spec = {
     service: "service-name@0.1.0",
@@ -112,27 +107,20 @@ Registers an Amino service.
   var service = amino.createService(spec, server);
   server.listen(spec.port);
   ```
-
 - `server`: A server instance returned by `net.createServer()` or
   `http.createServer()`.
-
 - Returns: a `Service` instance.
-
     - (event) `listening`: called when the service has published itself and is
       available for requests.
-
     - (property) `spec`: an object containing info about the service (gossiped
       around the cluster)
-
         - `service`: the service name
         - `version`: the service version, if specified
         - `host`: the hostname the server is reachable from
         - `port`: the server's listening port
         - `id`: a unique string identifying the server
-
     - (method) `close(onClose)`: close the service and the associated server. Called
       automatically when the server closes.
-
     - (event) `close`: called when the service closes.
 
 #### Example
@@ -157,19 +145,15 @@ var service = amino.createService('cool-stuff@0.1.0', server);
 Makes round-robin requests to Amino `http` services.
 
 - Alternate syntax:
-
     - (simple GET): amino.request('amino://service-name/' [, onResponse])
     - (generic HTTP): amino.request('http://some-site/' [, onResponse])
     - amino.request(options, [, onResponse])
-
 - `service-name`: the name of the service to request, with an optional
   [semver](http://semver.org) specification. Can be specified as the first
   parameter to `amino.request()`, or as the hostname in an amino url such as
   `amino://service-name/`.
-
 - `pathSpec`: the path to request, with an optional method before it, such as
   `POST /posts` or `DELETE /everything`.
-
 - `options`: options object to pass to the request, containing keys such as
   `headers` and `body` (for posts, etc.). See
   [mikeal/request](https://github.com/mikeal/request) for more options.
@@ -206,19 +190,14 @@ services, or to manually get a server spec for a given service.
 
 - `service-name`: the name of the service to request, with an optional
   [semver](http://semver.org) specification.
-
 - `onSpec`: callback to be called with a server `spec` object containing:
-
     - `service`: the service name
     - `version`: the service version, if specified
     - `host`: the hostname the server is reachable from
     - `port`: the server's listening port
     - `id`: a unique string identifying the server
-
 - Returns: a `ServiceRequest` instance:
-
   - (event) `spec`: called with the `spec` object.
-
   - (property) `headers`: an array of headers for the request (used internally)
 
 #### Example
@@ -254,20 +233,16 @@ To disable a plugin, just pass `false`.
 
 - To specify a single redis server, just pass a `host`, `port`, or `host:port` to
   `init`, for example:
-
   ```javascript
   var amino = require('amino')
     .init({
       redis: "1.2.3.4:5679"
     });
   ```
-
 - To use multiple redis servers for failover/load-balancing, just pass an array
   of servers. See [haredis](https://github.com/carlos8f/haredis) for more
   information.
-
 - To pass options to the redis client:
-
   ```javascript
   var amino = require('amino')
     .init({
@@ -288,13 +263,10 @@ To disable a plugin, just pass `false`.
 
 - `specRequestThrottle`: interval (in ms) to throttle publishes when requesting
   specs for a service. (Default: `5000`)
-
 - `specRequestInterval`: interval (in ms) to request "straggler" specs for all
   services. (Default: `120000`)
-
 - `readyTimeout`: time (in ms) before a service is deemed "ready" after getting
   the first spec. (Default: `200`)
-
 - (other options will also be passed to `http.Agent` constructor)
 
 Extending Amino
