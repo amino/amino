@@ -261,9 +261,9 @@ To disable a plugin, just pass `false`.
 
 ### Service options
 
-- `host`: By default, Amino will auto-detect your server's network IP by using a DNS
-  lookup on the server's `hostname`. If you already know the correct IP
-  (or hostname) to use, you can specify it with this option.
+- `host`: By default, Amino will auto-detect your server's network IP by
+  performing a DNS lookup on the server's `hostname`. If you already know the
+  correct IP (or hostname) to use, you can specify it with this option.
 
 ### Request options
 
