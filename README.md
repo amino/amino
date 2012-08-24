@@ -41,7 +41,7 @@ var amino = require('amino').init();
 Pattern #1: publish/subscribe
 -----------------------------
 
-### Method: amino.publish(ev [, arg, arg...])
+### Method: `amino.publish(ev [, arg, arg...])`
 
 Publishes an event, with optional arguments.
 
@@ -58,7 +58,7 @@ Publishes an event, with optional arguments.
 amino.publish('cool stuff', {cool: true});
 ```
 
-### Method: amino.subscribe(ev, handler)
+### Method: `amino.subscribe(ev, handler)`
 
 Subscribes to an event.
 
@@ -75,7 +75,7 @@ amino.subscribe('cool stuff', function (stuff) {
 });
 ```
 
-### Method: amino.unsubscribe(ev [, handler])
+### Method: `amino.unsubscribe(ev [, handler])`
 
 Unsubscribes from an event.
 
@@ -95,7 +95,7 @@ amino.subscribe('cool stuff', function (stuff) {
 Pattern #2: service/request
 ---------------------------
 
-### Method: amino.createService(service-name[@version] | spec, server)
+### Method: `amino.createService(service-name[@version] | spec, server)`
 
 Registers an Amino service.
 
@@ -153,7 +153,7 @@ emphemeral port and broadcast the availability of your service.
 var service = amino.createService('cool-stuff@0.1.0', server);
 ```
 
-### Method: amino.request(service-name[@version], patchSpec [, options, onResponse])
+### Method: `amino.request(service-name[@version], patchSpec [, options, onResponse])`
 
 Makes round-robin requests to Amino `http` services.
 
@@ -200,7 +200,7 @@ consistently route requests with.
 Note that as servers are added or removed from the service, sticky routing
 can be subject to change.
 
-### Method: amino.requestService(service-name[@version], onSpec)
+### Method: `amino.requestService(service-name[@version], onSpec)`
 
 Requests a round-robined server for the specified service. Use this for `net`
 services, or to manually get a server spec for a given service.
