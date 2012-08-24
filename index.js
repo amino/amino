@@ -7,30 +7,27 @@ function Amino () {
 inherits(Amino, EventEmitter);
 
 Amino.prototype.use = function (plugin, options) {
+  options = (this.utils && this.utils.copy(options)) || options || {};
   plugin.attach.call(this, options);
   return this;
 };
 
 Amino.prototype.init = function (options) {
-  options || (options = {});
-  var self = this;
-  self.options = {};
-  Object.keys(options).forEach(function (k) {
-    self.options[k] = options[k];
-  });
+  var amino = this;
 
   // Core utils.
-  this.use(require('./plugins/utils'));
-  this.id = this.utils.idgen();
+  amino.use(require('./plugins/utils'));
+  amino.options = amino.utils.copy(options);
+  amino.id = amino.utils.idgen();
 
   // Require external core plugins unless opt-out with "false".
   ['spec', 'redis', 'service', 'request'].forEach(function (plugin) {
-    if (self.options[plugin] !== false) {
-      self.use(require('amino-' + plugin), self.options[plugin]);
+    if (amino.options[plugin] !== false) {
+      amino.use(require('amino-' + plugin), amino.options[plugin]);
     }
   });
 
-  return this;
+  return amino;
 };
 
 module.exports = new Amino();
