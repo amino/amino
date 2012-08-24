@@ -1,7 +1,7 @@
 Amino
 =====
 
-Clustering framework
+Clustering framework for Node.js
 
 [![build status](https://secure.travis-ci.org/cantina/amino.png)](http://travis-ci.org/cantina/amino)
 
