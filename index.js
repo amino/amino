@@ -7,7 +7,9 @@ function Amino () {
 inherits(Amino, EventEmitter);
 
 Amino.prototype.use = function (plugin, options) {
-  options = (this.utils && this.utils.copy(options)) || options || {};
+  if (typeof options === 'undefined' || typeof options === 'object') {
+    options = (this.utils && this.utils.copy(options)) || options || {};
+  }
   plugin.attach.call(this, options);
   return this;
 };
