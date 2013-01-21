@@ -1,5 +1,4 @@
-Amino
-=====
+![amino](http://dl.dropbox.com/u/31196457/amino-rectangle.png)
 
 Clustering framework for Node.js
 
