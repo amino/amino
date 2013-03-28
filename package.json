@@ -12,7 +12,7 @@
     "idgen": "~1.1.1",
     "amino-redis": "~0.0.4",
     "amino-service": "~0.1.0",
-    "amino-request": "~0.2.0",
+    "amino-request": "~0.2.2",
     "amino-spec": "~0.1.0"
   },
   "homepage": "https://github.com/amino/amino",
